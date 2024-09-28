@@ -101,7 +101,7 @@ favicon = "/favicon.ico"
     repoID = "R_kgDOM4D09g"
     mapping = "pathname"
     lightTheme = "preferred_color_scheme"
-    darkTheme =  "preferred_color_scheme"
+    darkTheme =  "dark_tritanopia"
     reactionsEnabled = 1
     emitMetadata = 0
 
