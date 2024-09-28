@@ -67,7 +67,7 @@ favicon = "/favicon.ico"
 
   [params.comments]
   enabled = true
-  provider = "disqus"
+  provider = "giscus"
 
     [params.comments.disqusjs]
 
@@ -97,6 +97,11 @@ favicon = "/favicon.ico"
     siteName = ""
 
     [params.comments.giscus]
+    repo = "XiaoYuan-420/XiaoYuan-420.github.io"
+    repoID = "R_kgDOM4D09g"
+    mapping = "pathname"
+    lightTheme = "preferred_color_scheme"
+    darkTheme =  "preferred_color_scheme"
     reactionsEnabled = 1
     emitMetadata = 0
 
