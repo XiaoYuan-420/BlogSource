@@ -1,0 +1,10 @@
+[submodule "XiaoYuan/themes/hugo-theme-next"]
+	path = XiaoYuan/themes/hugo-theme-next
+	url = https://github.com/hugo-next/hugo-theme-next.git
+[submodule "XiaoYuan/themes/blowfish"]
+	path = XiaoYuan/themes/blowfish
+	url = https://github.com/nunocoracao/blowfish.git
+	branch = main
+[submodule "XiaoYuan/themes/hugo-theme-stack"]
+	path = XiaoYuan/themes/hugo-theme-stack
+	url = https://github.com/CaiJimmy/hugo-theme-stack/

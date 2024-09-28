@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="zh-cn" dir="ltr">
+    <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="TSCTF-J XiaoYuan Writeup\rMISC\rset set password\r单个数字之和必须等于 25，拿 1凑 罗马数字的乘积必须为 35，直接输 XXXV 验证码尽量刷出不含罗马数字和数字之和较小的 元素符号的拿 H凑 图寻直接一个国家一个国家试 密码长度拿空格凑和0凑（刚好满足闰年） 把系统时间设置成0:00避免25的问题 讲究一个暴力解决，说啥做啥，设置好密码就OK\nwordle\r要赢100局肯定要找一个必胜策略，在开局的时候要尽可能的选择字母种数多的，而且字母的出现频率要高，可以排除更多的单词或确定更多的信息\n直接贴源码\nimport socket import random import json import time from collections import Counter with open(&#34;5-letter-word.json&#34;, &#34;r&#34;, encoding=&#34;utf-8&#34;) as f: word_list = json.load(f) # word_list = [word for word in word_list if len(word) == 5] # with open(&#34;5-letter-word.json&#34;, &#34;w&#34;, encoding=&#34;utf-8&#34;) as f: # json.dump(word_list, f) def connect_to_wordle_server(): &#34;&#34;&#34;连接到Wordle服务器&#34;&#34;&#34; host = &#39;challenges.hazmat.buptmerak.cn&#39; port = 21473 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM) sock.connect((host, port)) # 连接到服务器 return sock class WordleSovler(): def __init__(self, all_word): self.all_word = all_word self.possible = all_word self.presence = set() self.presence_letter = set() self.vague = set() self.absence = set() def update_dict(self, guess, feedback): for ind, letter in enumerate(guess): if feedback[ind] == &#34;O&#34;: # print(f&#34;{letter}确定&#34;) self.presence.add((letter,ind)) self.presence_letter.add(letter) elif feedback[ind] == &#34;-&#34;: # print(f&#34;{letter}存在&#34;) self.vague.add((letter,ind)) self.presence_letter.add(letter) elif feedback[ind] == &#34;X&#34; and letter not in self.presence_letter: # print(f&#34;{letter}不存在&#34;) self.absence.add(letter) self.absence_copy = self.absence.copy() for letter in self.absence_copy: if letter in self.presence_letter: self.absence.remove(letter) # print(f&#34;{self.presence=}&#34;) # print(f&#34;{self.vague=}&#34;) # print(f&#34;{self.absence=}&#34;) def is_contain_absence_letters(self, word): for c in word: if c in self.absence: return True return False def is_match_presence(self,word): for letter, index in self.presence: if word[index] != letter: return False return True def is_match_vague(self,word): for letter, index in self.vague: if word[index] == letter or letter not in word: return False return True def update_list(self): new_list = [] for word in self.possible: if self.is_contain_absence_letters(word) or not self.is_match_presence( word) or not self.is_match_vague(word): continue new_list.append(word) self.possible = new_list def get_untried(self,words): counter = Counter() tried = self.absence | self.presence_letter all_letter = set(chr(ord(&#39;a&#39;)+i) for i in range(26)) untried = all_letter - tried for w in words: for c in w: if c in untried: counter[c] += 1 return counter def get_freq(self, words): counter = Counter() for w in words: for c in w: counter[c] += 1 return counter def generator(self, attempt): # self.possible.sort(key=lambda x:-len(set(x))) # return random.choice(self.possible[:50]) untried = self.get_untried(self.possible) freq = self.get_freq(self.possible) if len(untried) &gt; 1 and attempt &lt; 5: word_with_score = [] word_list = self.all_word for word in word_list: letters = set(word) untried_score = sum(untried[c] if c in untried else 0 for c in letters) freq_score = sum(freq[c] if c in freq else 0 for c in letters) word_with_score.append((word,untried_score,freq_score)) ranked_words = sorted(word_with_score, key=lambda item:(-item[1],-item[2],item[0])) guess = ranked_words[0][0] else: guess = \\ sorted(self.possible, key=lambda word: (-len(set(word)), -sum(freq[c] for c in word), word))[0] return guess def update(self, guess, feedback): self.update_dict(guess, feedback) self.update_list() # print(f&#34;after update:{len(self.possible)}&#34;) def reset(self): self.possible = self.all_word self.presence = set() self.presence_letter = set() self.vague = set() self.absence = set() solver = WordleSovler(word_list) def play_one_time(sock:socket, solver:WordleSovler,win): if win == 94: sock.sendall(b&#34;every&#34;) print(f&#34;msg:{sock.recv(4096).decode()}&#34;) # round消息 return True if win == 95: sock.sendall(b&#34;smile&#34;) print(f&#34;msg:{sock.recv(4096).decode()}&#34;) # round消息 return True if win == 96: sock.sendall(b&#34;shows&#34;) print(f&#34;msg:{sock.recv(4096).decode()}&#34;) # round消息 return True if win == 97: sock.sendall(b&#34;great&#34;) print(f&#34;msg:{sock.recv(4096).decode()}&#34;) # round消息 return True if win == 98: sock.sendall(b&#34;power&#34;) print(f&#34;msg:{sock.recv(4096).decode()}&#34;) # round消息 return True attempt = 0 while attempt &lt; 6: print(f&#34;msg:{sock.recv(4096).decode()}&#34;) # round消息 guess = solver.generator(attempt) print(f&#34;try:{guess}&#34;) sock.sendall(guess.encode()) feedback = sock.recv(4096).decode().strip() #XXOO- print(feedback) # print(2) if &#34;OOOOO&#34; in feedback: return True if &#34;You lost.&#34; in feedback: return False if &#34;Word not found!&#34; in feedback: try: solver.all_word.remove(guess) solver.possible.remove(guess) except Exception: pass continue solver.update(guess, feedback) attempt += 1 sock = connect_to_wordle_server() feedback = sock.recv(4096).decode() print(f&#34;初次连接：\\n{feedback}&#34;) win = 0 try: while win &lt; 100: print(f&#34;{win=}&#34;) if play_one_time(sock, solver,win): solver.reset() win += 1 print(f&#34;msg:{sock.recv(4096).decode()}&#34;) # 不要错过flag消息 print(f&#34;msg:{sock.recv(4096).decode()}&#34;) # 不要错过flag消息 print(f&#34;msg:{sock.recv(4096).decode()}&#34;) # 不要错过flag消息 print(f&#34;msg:{sock.recv(4096).decode()}&#34;) # 不要错过flag消息 except Exception as e: print(f&#34;error:{e}&#34;) sock.close() ">
+<title>TSCTF-J wp</title>
+
+<link rel='canonical' href='http://localhost:1313/xiaoyuan/'>
+
+<link rel="stylesheet" href="/scss/style.min.b9c8156d464c343bdacaf14a871581fb94cbbdb9dd5cbce4ba017361187cc930.css"><meta property='og:title' content="TSCTF-J wp">
+<meta property='og:description' content="TSCTF-J XiaoYuan Writeup\rMISC\rset set password\r单个数字之和必须等于 25，拿 1凑 罗马数字的乘积必须为 35，直接输 XXXV 验证码尽量刷出不含罗马数字和数字之和较小的 元素符号的拿 H凑 图寻直接一个国家一个国家试 密码长度拿空格凑和0凑（刚好满足闰年） 把系统时间设置成0:00避免25的问题 讲究一个暴力解决，说啥做啥，设置好密码就OK\nwordle\r要赢100局肯定要找一个必胜策略，在开局的时候要尽可能的选择字母种数多的，而且字母的出现频率要高，可以排除更多的单词或确定更多的信息\n直接贴源码\nimport socket import random import json import time from collections import Counter with open(&#34;5-letter-word.json&#34;, &#34;r&#34;, encoding=&#34;utf-8&#34;) as f: word_list = json.load(f) # word_list = [word for word in word_list if len(word) == 5] # with open(&#34;5-letter-word.json&#34;, &#34;w&#34;, encoding=&#34;utf-8&#34;) as f: # json.dump(word_list, f) def connect_to_wordle_server(): &#34;&#34;&#34;连接到Wordle服务器&#34;&#34;&#34; host = &#39;challenges.hazmat.buptmerak.cn&#39; port = 21473 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM) sock.connect((host, port)) # 连接到服务器 return sock class WordleSovler(): def __init__(self, all_word): self.all_word = all_word self.possible = all_word self.presence = set() self.presence_letter = set() self.vague = set() self.absence = set() def update_dict(self, guess, feedback): for ind, letter in enumerate(guess): if feedback[ind] == &#34;O&#34;: # print(f&#34;{letter}确定&#34;) self.presence.add((letter,ind)) self.presence_letter.add(letter) elif feedback[ind] == &#34;-&#34;: # print(f&#34;{letter}存在&#34;) self.vague.add((letter,ind)) self.presence_letter.add(letter) elif feedback[ind] == &#34;X&#34; and letter not in self.presence_letter: # print(f&#34;{letter}不存在&#34;) self.absence.add(letter) self.absence_copy = self.absence.copy() for letter in self.absence_copy: if letter in self.presence_letter: self.absence.remove(letter) # print(f&#34;{self.presence=}&#34;) # print(f&#34;{self.vague=}&#34;) # print(f&#34;{self.absence=}&#34;) def is_contain_absence_letters(self, word): for c in word: if c in self.absence: return True return False def is_match_presence(self,word): for letter, index in self.presence: if word[index] != letter: return False return True def is_match_vague(self,word): for letter, index in self.vague: if word[index] == letter or letter not in word: return False return True def update_list(self): new_list = [] for word in self.possible: if self.is_contain_absence_letters(word) or not self.is_match_presence( word) or not self.is_match_vague(word): continue new_list.append(word) self.possible = new_list def get_untried(self,words): counter = Counter() tried = self.absence | self.presence_letter all_letter = set(chr(ord(&#39;a&#39;)+i) for i in range(26)) untried = all_letter - tried for w in words: for c in w: if c in untried: counter[c] += 1 return counter def get_freq(self, words): counter = Counter() for w in words: for c in w: counter[c] += 1 return counter def generator(self, attempt): # self.possible.sort(key=lambda x:-len(set(x))) # return random.choice(self.possible[:50]) untried = self.get_untried(self.possible) freq = self.get_freq(self.possible) if len(untried) &gt; 1 and attempt &lt; 5: word_with_score = [] word_list = self.all_word for word in word_list: letters = set(word) untried_score = sum(untried[c] if c in untried else 0 for c in letters) freq_score = sum(freq[c] if c in freq else 0 for c in letters) word_with_score.append((word,untried_score,freq_score)) ranked_words = sorted(word_with_score, key=lambda item:(-item[1],-item[2],item[0])) guess = ranked_words[0][0] else: guess = \\ sorted(self.possible, key=lambda word: (-len(set(word)), -sum(freq[c] for c in word), word))[0] return guess def update(self, guess, feedback): self.update_dict(guess, feedback) self.update_list() # print(f&#34;after update:{len(self.possible)}&#34;) def reset(self): self.possible = self.all_word self.presence = set() self.presence_letter = set() self.vague = set() self.absence = set() solver = WordleSovler(word_list) def play_one_time(sock:socket, solver:WordleSovler,win): if win == 94: sock.sendall(b&#34;every&#34;) print(f&#34;msg:{sock.recv(4096).decode()}&#34;) # round消息 return True if win == 95: sock.sendall(b&#34;smile&#34;) print(f&#34;msg:{sock.recv(4096).decode()}&#34;) # round消息 return True if win == 96: sock.sendall(b&#34;shows&#34;) print(f&#34;msg:{sock.recv(4096).decode()}&#34;) # round消息 return True if win == 97: sock.sendall(b&#34;great&#34;) print(f&#34;msg:{sock.recv(4096).decode()}&#34;) # round消息 return True if win == 98: sock.sendall(b&#34;power&#34;) print(f&#34;msg:{sock.recv(4096).decode()}&#34;) # round消息 return True attempt = 0 while attempt &lt; 6: print(f&#34;msg:{sock.recv(4096).decode()}&#34;) # round消息 guess = solver.generator(attempt) print(f&#34;try:{guess}&#34;) sock.sendall(guess.encode()) feedback = sock.recv(4096).decode().strip() #XXOO- print(feedback) # print(2) if &#34;OOOOO&#34; in feedback: return True if &#34;You lost.&#34; in feedback: return False if &#34;Word not found!&#34; in feedback: try: solver.all_word.remove(guess) solver.possible.remove(guess) except Exception: pass continue solver.update(guess, feedback) attempt += 1 sock = connect_to_wordle_server() feedback = sock.recv(4096).decode() print(f&#34;初次连接：\\n{feedback}&#34;) win = 0 try: while win &lt; 100: print(f&#34;{win=}&#34;) if play_one_time(sock, solver,win): solver.reset() win += 1 print(f&#34;msg:{sock.recv(4096).decode()}&#34;) # 不要错过flag消息 print(f&#34;msg:{sock.recv(4096).decode()}&#34;) # 不要错过flag消息 print(f&#34;msg:{sock.recv(4096).decode()}&#34;) # 不要错过flag消息 print(f&#34;msg:{sock.recv(4096).decode()}&#34;) # 不要错过flag消息 except Exception as e: print(f&#34;error:{e}&#34;) sock.close() ">
+<meta property='og:url' content='http://localhost:1313/xiaoyuan/'>
+<meta property='og:site_name' content='XiaoYuan Blog'>
+<meta property='og:type' content='article'><meta property='article:section' content='' /><meta property='article:published_time' content='2024-09-28T11:12:41&#43;08:00'/><meta property='article:modified_time' content='2024-09-28T11:12:41&#43;08:00'/>
+<meta name="twitter:title" content="TSCTF-J wp">
+<meta name="twitter:description" content="TSCTF-J XiaoYuan Writeup\rMISC\rset set password\r单个数字之和必须等于 25，拿 1凑 罗马数字的乘积必须为 35，直接输 XXXV 验证码尽量刷出不含罗马数字和数字之和较小的 元素符号的拿 H凑 图寻直接一个国家一个国家试 密码长度拿空格凑和0凑（刚好满足闰年） 把系统时间设置成0:00避免25的问题 讲究一个暴力解决，说啥做啥，设置好密码就OK\nwordle\r要赢100局肯定要找一个必胜策略，在开局的时候要尽可能的选择字母种数多的，而且字母的出现频率要高，可以排除更多的单词或确定更多的信息\n直接贴源码\nimport socket import random import json import time from collections import Counter with open(&#34;5-letter-word.json&#34;, &#34;r&#34;, encoding=&#34;utf-8&#34;) as f: word_list = json.load(f) # word_list = [word for word in word_list if len(word) == 5] # with open(&#34;5-letter-word.json&#34;, &#34;w&#34;, encoding=&#34;utf-8&#34;) as f: # json.dump(word_list, f) def connect_to_wordle_server(): &#34;&#34;&#34;连接到Wordle服务器&#34;&#34;&#34; host = &#39;challenges.hazmat.buptmerak.cn&#39; port = 21473 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM) sock.connect((host, port)) # 连接到服务器 return sock class WordleSovler(): def __init__(self, all_word): self.all_word = all_word self.possible = all_word self.presence = set() self.presence_letter = set() self.vague = set() self.absence = set() def update_dict(self, guess, feedback): for ind, letter in enumerate(guess): if feedback[ind] == &#34;O&#34;: # print(f&#34;{letter}确定&#34;) self.presence.add((letter,ind)) self.presence_letter.add(letter) elif feedback[ind] == &#34;-&#34;: # print(f&#34;{letter}存在&#34;) self.vague.add((letter,ind)) self.presence_letter.add(letter) elif feedback[ind] == &#34;X&#34; and letter not in self.presence_letter: # print(f&#34;{letter}不存在&#34;) self.absence.add(letter) self.absence_copy = self.absence.copy() for letter in self.absence_copy: if letter in self.presence_letter: self.absence.remove(letter) # print(f&#34;{self.presence=}&#34;) # print(f&#34;{self.vague=}&#34;) # print(f&#34;{self.absence=}&#34;) def is_contain_absence_letters(self, word): for c in word: if c in self.absence: return True return False def is_match_presence(self,word): for letter, index in self.presence: if word[index] != letter: return False return True def is_match_vague(self,word): for letter, index in self.vague: if word[index] == letter or letter not in word: return False return True def update_list(self): new_list = [] for word in self.possible: if self.is_contain_absence_letters(word) or not self.is_match_presence( word) or not self.is_match_vague(word): continue new_list.append(word) self.possible = new_list def get_untried(self,words): counter = Counter() tried = self.absence | self.presence_letter all_letter = set(chr(ord(&#39;a&#39;)+i) for i in range(26)) untried = all_letter - tried for w in words: for c in w: if c in untried: counter[c] += 1 return counter def get_freq(self, words): counter = Counter() for w in words: for c in w: counter[c] += 1 return counter def generator(self, attempt): # self.possible.sort(key=lambda x:-len(set(x))) # return random.choice(self.possible[:50]) untried = self.get_untried(self.possible) freq = self.get_freq(self.possible) if len(untried) &gt; 1 and attempt &lt; 5: word_with_score = [] word_list = self.all_word for word in word_list: letters = set(word) untried_score = sum(untried[c] if c in untried else 0 for c in letters) freq_score = sum(freq[c] if c in freq else 0 for c in letters) word_with_score.append((word,untried_score,freq_score)) ranked_words = sorted(word_with_score, key=lambda item:(-item[1],-item[2],item[0])) guess = ranked_words[0][0] else: guess = \\ sorted(self.possible, key=lambda word: (-len(set(word)), -sum(freq[c] for c in word), word))[0] return guess def update(self, guess, feedback): self.update_dict(guess, feedback) self.update_list() # print(f&#34;after update:{len(self.possible)}&#34;) def reset(self): self.possible = self.all_word self.presence = set() self.presence_letter = set() self.vague = set() self.absence = set() solver = WordleSovler(word_list) def play_one_time(sock:socket, solver:WordleSovler,win): if win == 94: sock.sendall(b&#34;every&#34;) print(f&#34;msg:{sock.recv(4096).decode()}&#34;) # round消息 return True if win == 95: sock.sendall(b&#34;smile&#34;) print(f&#34;msg:{sock.recv(4096).decode()}&#34;) # round消息 return True if win == 96: sock.sendall(b&#34;shows&#34;) print(f&#34;msg:{sock.recv(4096).decode()}&#34;) # round消息 return True if win == 97: sock.sendall(b&#34;great&#34;) print(f&#34;msg:{sock.recv(4096).decode()}&#34;) # round消息 return True if win == 98: sock.sendall(b&#34;power&#34;) print(f&#34;msg:{sock.recv(4096).decode()}&#34;) # round消息 return True attempt = 0 while attempt &lt; 6: print(f&#34;msg:{sock.recv(4096).decode()}&#34;) # round消息 guess = solver.generator(attempt) print(f&#34;try:{guess}&#34;) sock.sendall(guess.encode()) feedback = sock.recv(4096).decode().strip() #XXOO- print(feedback) # print(2) if &#34;OOOOO&#34; in feedback: return True if &#34;You lost.&#34; in feedback: return False if &#34;Word not found!&#34; in feedback: try: solver.all_word.remove(guess) solver.possible.remove(guess) except Exception: pass continue solver.update(guess, feedback) attempt += 1 sock = connect_to_wordle_server() feedback = sock.recv(4096).decode() print(f&#34;初次连接：\\n{feedback}&#34;) win = 0 try: while win &lt; 100: print(f&#34;{win=}&#34;) if play_one_time(sock, solver,win): solver.reset() win += 1 print(f&#34;msg:{sock.recv(4096).decode()}&#34;) # 不要错过flag消息 print(f&#34;msg:{sock.recv(4096).decode()}&#34;) # 不要错过flag消息 print(f&#34;msg:{sock.recv(4096).decode()}&#34;) # 不要错过flag消息 print(f&#34;msg:{sock.recv(4096).decode()}&#34;) # 不要错过flag消息 except Exception as e: print(f&#34;error:{e}&#34;) sock.close() ">
+    </head>
+    <body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column compact"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="Toggle Menu">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+            
+            <figure class="site-avatar">
+                <a href="/">
+                
+                    
+                    
+                    
+                        
+                        <img src="/img/avatar_hu13739649187745961479.png" width="300"
+                            height="300" class="site-logo" loading="lazy" alt="Avatar">
+                    
+                
+                </a>
+                
+            </figure>
+            
+        
+        
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/">XiaoYuan Blog</a></h1>
+            <h2 class="site-description"></h2>
+        </div>
+    </header><ol class="menu" id="main-menu">
+        
+        
+        <li class="menu-bottom-section">
+            <ol class="menu">
+
+                
+                    <li id="dark-mode-toggle">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <span>Dark Mode</span>
+                    </li>
+                
+            </ol>
+        </li>
+    </ol>
+</aside>
+
+    
+
+            <main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/xiaoyuan/">TSCTF-J wp</a>
+        </h2>
+    
+        
+    </div>
+
+    
+    
+    
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">Sep 28, 2024</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    4 minute read
+                </time>
+            </div>
+        
+    </footer>
+    
+
+    
+</div>
+
+</header>
+
+    <section class="article-content">
+    
+    
+    <h1 id="tsctf-j-xiaoyuan-writeup">TSCTF-J XiaoYuan Writeup
+</h1><h2 id="misc">MISC
+</h2><hr>
+<h3 id="set-set-password">set set password
+</h3><ol>
+<li>单个数字之和必须等于 <code>25</code>，拿 <code>1</code>凑</li>
+<li>罗马数字的乘积必须为 <code>35</code>，直接输 <code>XXXV</code></li>
+<li>验证码尽量刷出不含罗马数字和数字之和较小的</li>
+<li>元素符号的拿 <code>H</code>凑</li>
+<li>图寻直接一个国家一个国家试</li>
+<li>密码长度拿空格凑和0凑（刚好满足闰年）</li>
+<li>把系统时间设置成0:00避免25的问题</li>
+</ol>
+<p>讲究一个暴力解决，说啥做啥，设置好密码就OK</p>
+<hr>
+<h3 id="wordle">wordle
+</h3><p>要赢100局肯定要找一个必胜策略，在开局的时候要尽可能的选择字母种数多的，而且字母的出现频率要高，可以排除更多的单词或确定更多的信息</p>
+<p>直接贴源码</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">import</span> socket
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> random
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> json
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> time
+</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> collections <span style="color:#f92672">import</span> Counter
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">with</span> open(<span style="color:#e6db74">&#34;5-letter-word.json&#34;</span>, <span style="color:#e6db74">&#34;r&#34;</span>, encoding<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;utf-8&#34;</span>) <span style="color:#66d9ef">as</span> f:
+</span></span><span style="display:flex;"><span>    word_list <span style="color:#f92672">=</span> json<span style="color:#f92672">.</span>load(f)
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># word_list = [word for word in word_list if len(word) == 5]</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># with open(&#34;5-letter-word.json&#34;, &#34;w&#34;, encoding=&#34;utf-8&#34;) as f:</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#     json.dump(word_list, f)</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">connect_to_wordle_server</span>():
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;&#34;&#34;连接到Wordle服务器&#34;&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>    host <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;challenges.hazmat.buptmerak.cn&#39;</span>
+</span></span><span style="display:flex;"><span>    port <span style="color:#f92672">=</span> <span style="color:#ae81ff">21473</span>
+</span></span><span style="display:flex;"><span>    sock <span style="color:#f92672">=</span> socket<span style="color:#f92672">.</span>socket(socket<span style="color:#f92672">.</span>AF_INET, socket<span style="color:#f92672">.</span>SOCK_STREAM)
+</span></span><span style="display:flex;"><span>    sock<span style="color:#f92672">.</span>connect((host, port))  <span style="color:#75715e"># 连接到服务器</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> sock
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">WordleSovler</span>():
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> __init__(self, all_word):
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>all_word <span style="color:#f92672">=</span> all_word
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>possible <span style="color:#f92672">=</span> all_word
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>presence <span style="color:#f92672">=</span> set()
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>presence_letter <span style="color:#f92672">=</span> set()
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>vague <span style="color:#f92672">=</span> set()
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>absence <span style="color:#f92672">=</span> set()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">update_dict</span>(self, guess, feedback):
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">for</span> ind, letter <span style="color:#f92672">in</span> enumerate(guess):
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> feedback[ind] <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;O&#34;</span>:
+</span></span><span style="display:flex;"><span>                <span style="color:#75715e"># print(f&#34;{letter}确定&#34;)</span>
+</span></span><span style="display:flex;"><span>                self<span style="color:#f92672">.</span>presence<span style="color:#f92672">.</span>add((letter,ind))
+</span></span><span style="display:flex;"><span>                self<span style="color:#f92672">.</span>presence_letter<span style="color:#f92672">.</span>add(letter)
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">elif</span> feedback[ind] <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;-&#34;</span>:
+</span></span><span style="display:flex;"><span>                <span style="color:#75715e"># print(f&#34;{letter}存在&#34;)</span>
+</span></span><span style="display:flex;"><span>                self<span style="color:#f92672">.</span>vague<span style="color:#f92672">.</span>add((letter,ind))
+</span></span><span style="display:flex;"><span>                self<span style="color:#f92672">.</span>presence_letter<span style="color:#f92672">.</span>add(letter)
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">elif</span> feedback[ind] <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;X&#34;</span> <span style="color:#f92672">and</span> letter <span style="color:#f92672">not</span> <span style="color:#f92672">in</span> self<span style="color:#f92672">.</span>presence_letter:
+</span></span><span style="display:flex;"><span>                <span style="color:#75715e"># print(f&#34;{letter}不存在&#34;)</span>
+</span></span><span style="display:flex;"><span>                self<span style="color:#f92672">.</span>absence<span style="color:#f92672">.</span>add(letter)
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>absence_copy <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>absence<span style="color:#f92672">.</span>copy()
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">for</span> letter <span style="color:#f92672">in</span> self<span style="color:#f92672">.</span>absence_copy:
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> letter <span style="color:#f92672">in</span> self<span style="color:#f92672">.</span>presence_letter:
+</span></span><span style="display:flex;"><span>                self<span style="color:#f92672">.</span>absence<span style="color:#f92672">.</span>remove(letter)
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># print(f&#34;{self.presence=}&#34;)</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># print(f&#34;{self.vague=}&#34;)</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># print(f&#34;{self.absence=}&#34;)</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">is_contain_absence_letters</span>(self, word):
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">for</span> c <span style="color:#f92672">in</span> word:
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> c <span style="color:#f92672">in</span> self<span style="color:#f92672">.</span>absence:
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">True</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">False</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">is_match_presence</span>(self,word):
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">for</span> letter, index <span style="color:#f92672">in</span> self<span style="color:#f92672">.</span>presence:
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> word[index] <span style="color:#f92672">!=</span> letter:
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">False</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">True</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">is_match_vague</span>(self,word):
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">for</span> letter, index <span style="color:#f92672">in</span> self<span style="color:#f92672">.</span>vague:
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> word[index] <span style="color:#f92672">==</span> letter <span style="color:#f92672">or</span> letter <span style="color:#f92672">not</span> <span style="color:#f92672">in</span> word:
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">False</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">True</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">update_list</span>(self):
+</span></span><span style="display:flex;"><span>        new_list <span style="color:#f92672">=</span> []
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">for</span> word <span style="color:#f92672">in</span> self<span style="color:#f92672">.</span>possible:
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> self<span style="color:#f92672">.</span>is_contain_absence_letters(word) <span style="color:#f92672">or</span> <span style="color:#f92672">not</span> self<span style="color:#f92672">.</span>is_match_presence(
+</span></span><span style="display:flex;"><span>                 word) <span style="color:#f92672">or</span> <span style="color:#f92672">not</span> self<span style="color:#f92672">.</span>is_match_vague(word):
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">continue</span>
+</span></span><span style="display:flex;"><span>            new_list<span style="color:#f92672">.</span>append(word)
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>possible <span style="color:#f92672">=</span> new_list
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">get_untried</span>(self,words):
+</span></span><span style="display:flex;"><span>        counter <span style="color:#f92672">=</span> Counter()
+</span></span><span style="display:flex;"><span>        tried <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>absence <span style="color:#f92672">|</span> self<span style="color:#f92672">.</span>presence_letter
+</span></span><span style="display:flex;"><span>        all_letter <span style="color:#f92672">=</span> set(chr(ord(<span style="color:#e6db74">&#39;a&#39;</span>)<span style="color:#f92672">+</span>i) <span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">26</span>))
+</span></span><span style="display:flex;"><span>        untried <span style="color:#f92672">=</span> all_letter <span style="color:#f92672">-</span> tried
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">for</span> w <span style="color:#f92672">in</span> words:
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">for</span> c <span style="color:#f92672">in</span> w:
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">if</span> c <span style="color:#f92672">in</span> untried:
+</span></span><span style="display:flex;"><span>                    counter[c] <span style="color:#f92672">+=</span> <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> counter
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">get_freq</span>(self, words):
+</span></span><span style="display:flex;"><span>        counter <span style="color:#f92672">=</span> Counter()
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">for</span> w <span style="color:#f92672">in</span> words:
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">for</span> c <span style="color:#f92672">in</span> w:
+</span></span><span style="display:flex;"><span>                counter[c] <span style="color:#f92672">+=</span> <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> counter
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">generator</span>(self, attempt):
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># self.possible.sort(key=lambda x:-len(set(x)))</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># return random.choice(self.possible[:50])</span>
+</span></span><span style="display:flex;"><span>        untried <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>get_untried(self<span style="color:#f92672">.</span>possible)
+</span></span><span style="display:flex;"><span>        freq <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>get_freq(self<span style="color:#f92672">.</span>possible)
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> len(untried) <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">1</span> <span style="color:#f92672">and</span> attempt <span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">5</span>:
+</span></span><span style="display:flex;"><span>            word_with_score <span style="color:#f92672">=</span> []
+</span></span><span style="display:flex;"><span>            word_list <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>all_word
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">for</span> word <span style="color:#f92672">in</span> word_list:
+</span></span><span style="display:flex;"><span>                letters <span style="color:#f92672">=</span> set(word)
+</span></span><span style="display:flex;"><span>                untried_score <span style="color:#f92672">=</span> sum(untried[c] <span style="color:#66d9ef">if</span> c <span style="color:#f92672">in</span> untried <span style="color:#66d9ef">else</span> <span style="color:#ae81ff">0</span> <span style="color:#66d9ef">for</span> c <span style="color:#f92672">in</span> letters)
+</span></span><span style="display:flex;"><span>                freq_score <span style="color:#f92672">=</span> sum(freq[c] <span style="color:#66d9ef">if</span> c <span style="color:#f92672">in</span> freq <span style="color:#66d9ef">else</span> <span style="color:#ae81ff">0</span> <span style="color:#66d9ef">for</span> c <span style="color:#f92672">in</span> letters)
+</span></span><span style="display:flex;"><span>                word_with_score<span style="color:#f92672">.</span>append((word,untried_score,freq_score))
+</span></span><span style="display:flex;"><span>            ranked_words <span style="color:#f92672">=</span> sorted(word_with_score,
+</span></span><span style="display:flex;"><span>                                  key<span style="color:#f92672">=</span><span style="color:#66d9ef">lambda</span> item:(<span style="color:#f92672">-</span>item[<span style="color:#ae81ff">1</span>],<span style="color:#f92672">-</span>item[<span style="color:#ae81ff">2</span>],item[<span style="color:#ae81ff">0</span>]))
+</span></span><span style="display:flex;"><span>            guess <span style="color:#f92672">=</span> ranked_words[<span style="color:#ae81ff">0</span>][<span style="color:#ae81ff">0</span>]
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">else</span>:
+</span></span><span style="display:flex;"><span>            guess <span style="color:#f92672">=</span> \
+</span></span><span style="display:flex;"><span>                sorted(self<span style="color:#f92672">.</span>possible,
+</span></span><span style="display:flex;"><span>                       key<span style="color:#f92672">=</span><span style="color:#66d9ef">lambda</span> word: (<span style="color:#f92672">-</span>len(set(word)), <span style="color:#f92672">-</span>sum(freq[c] <span style="color:#66d9ef">for</span> c <span style="color:#f92672">in</span> word), word))[<span style="color:#ae81ff">0</span>]
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> guess
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">update</span>(self, guess, feedback):
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>update_dict(guess, feedback)
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>update_list()
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># print(f&#34;after update:{len(self.possible)}&#34;)</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">reset</span>(self):
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>possible <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>all_word
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>presence <span style="color:#f92672">=</span> set()
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>presence_letter <span style="color:#f92672">=</span> set()
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>vague <span style="color:#f92672">=</span> set()
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>absence <span style="color:#f92672">=</span> set()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>solver <span style="color:#f92672">=</span> WordleSovler(word_list)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">play_one_time</span>(sock:socket, solver:WordleSovler,win):
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> win <span style="color:#f92672">==</span> <span style="color:#ae81ff">94</span>:
+</span></span><span style="display:flex;"><span>        sock<span style="color:#f92672">.</span>sendall(<span style="color:#e6db74">b</span><span style="color:#e6db74">&#34;every&#34;</span>)
+</span></span><span style="display:flex;"><span>        print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;msg:</span><span style="color:#e6db74">{</span>sock<span style="color:#f92672">.</span>recv(<span style="color:#ae81ff">4096</span>)<span style="color:#f92672">.</span>decode()<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>)    <span style="color:#75715e"># round消息</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">True</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> win <span style="color:#f92672">==</span> <span style="color:#ae81ff">95</span>:
+</span></span><span style="display:flex;"><span>        sock<span style="color:#f92672">.</span>sendall(<span style="color:#e6db74">b</span><span style="color:#e6db74">&#34;smile&#34;</span>)
+</span></span><span style="display:flex;"><span>        print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;msg:</span><span style="color:#e6db74">{</span>sock<span style="color:#f92672">.</span>recv(<span style="color:#ae81ff">4096</span>)<span style="color:#f92672">.</span>decode()<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>)    <span style="color:#75715e"># round消息</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">True</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> win <span style="color:#f92672">==</span> <span style="color:#ae81ff">96</span>:
+</span></span><span style="display:flex;"><span>        sock<span style="color:#f92672">.</span>sendall(<span style="color:#e6db74">b</span><span style="color:#e6db74">&#34;shows&#34;</span>)
+</span></span><span style="display:flex;"><span>        print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;msg:</span><span style="color:#e6db74">{</span>sock<span style="color:#f92672">.</span>recv(<span style="color:#ae81ff">4096</span>)<span style="color:#f92672">.</span>decode()<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>)    <span style="color:#75715e"># round消息</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">True</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> win <span style="color:#f92672">==</span> <span style="color:#ae81ff">97</span>:
+</span></span><span style="display:flex;"><span>        sock<span style="color:#f92672">.</span>sendall(<span style="color:#e6db74">b</span><span style="color:#e6db74">&#34;great&#34;</span>)
+</span></span><span style="display:flex;"><span>        print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;msg:</span><span style="color:#e6db74">{</span>sock<span style="color:#f92672">.</span>recv(<span style="color:#ae81ff">4096</span>)<span style="color:#f92672">.</span>decode()<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>)    <span style="color:#75715e"># round消息</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">True</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> win <span style="color:#f92672">==</span> <span style="color:#ae81ff">98</span>:
+</span></span><span style="display:flex;"><span>        sock<span style="color:#f92672">.</span>sendall(<span style="color:#e6db74">b</span><span style="color:#e6db74">&#34;power&#34;</span>)
+</span></span><span style="display:flex;"><span>        print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;msg:</span><span style="color:#e6db74">{</span>sock<span style="color:#f92672">.</span>recv(<span style="color:#ae81ff">4096</span>)<span style="color:#f92672">.</span>decode()<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>)    <span style="color:#75715e"># round消息</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">True</span>
+</span></span><span style="display:flex;"><span>    attempt <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">while</span> attempt <span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">6</span>:
+</span></span><span style="display:flex;"><span>        print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;msg:</span><span style="color:#e6db74">{</span>sock<span style="color:#f92672">.</span>recv(<span style="color:#ae81ff">4096</span>)<span style="color:#f92672">.</span>decode()<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>)    <span style="color:#75715e"># round消息</span>
+</span></span><span style="display:flex;"><span>        guess <span style="color:#f92672">=</span> solver<span style="color:#f92672">.</span>generator(attempt)
+</span></span><span style="display:flex;"><span>        print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;try:</span><span style="color:#e6db74">{</span>guess<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>)
+</span></span><span style="display:flex;"><span>        sock<span style="color:#f92672">.</span>sendall(guess<span style="color:#f92672">.</span>encode())
+</span></span><span style="display:flex;"><span>        feedback <span style="color:#f92672">=</span> sock<span style="color:#f92672">.</span>recv(<span style="color:#ae81ff">4096</span>)<span style="color:#f92672">.</span>decode()<span style="color:#f92672">.</span>strip() <span style="color:#75715e">#XXOO-</span>
+</span></span><span style="display:flex;"><span>        print(feedback)
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># print(2)</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> <span style="color:#e6db74">&#34;OOOOO&#34;</span> <span style="color:#f92672">in</span> feedback:
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">True</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> <span style="color:#e6db74">&#34;You lost.&#34;</span> <span style="color:#f92672">in</span> feedback:
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">False</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> <span style="color:#e6db74">&#34;Word not found!&#34;</span> <span style="color:#f92672">in</span> feedback:
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">try</span>:
+</span></span><span style="display:flex;"><span>                solver<span style="color:#f92672">.</span>all_word<span style="color:#f92672">.</span>remove(guess)
+</span></span><span style="display:flex;"><span>                solver<span style="color:#f92672">.</span>possible<span style="color:#f92672">.</span>remove(guess)
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">except</span> <span style="color:#a6e22e">Exception</span>:
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">pass</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">continue</span>
+</span></span><span style="display:flex;"><span>        solver<span style="color:#f92672">.</span>update(guess, feedback)
+</span></span><span style="display:flex;"><span>        attempt <span style="color:#f92672">+=</span> <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>sock <span style="color:#f92672">=</span> connect_to_wordle_server()
+</span></span><span style="display:flex;"><span>feedback <span style="color:#f92672">=</span> sock<span style="color:#f92672">.</span>recv(<span style="color:#ae81ff">4096</span>)<span style="color:#f92672">.</span>decode()
+</span></span><span style="display:flex;"><span>print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;初次连接：</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">{</span>feedback<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>)
+</span></span><span style="display:flex;"><span>win <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">try</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">while</span> win <span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">100</span>:
+</span></span><span style="display:flex;"><span>        print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">{</span>win<span style="color:#e6db74">=}</span><span style="color:#e6db74">&#34;</span>)
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> play_one_time(sock, solver,win):
+</span></span><span style="display:flex;"><span>            solver<span style="color:#f92672">.</span>reset()
+</span></span><span style="display:flex;"><span>            win <span style="color:#f92672">+=</span> <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>    print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;msg:</span><span style="color:#e6db74">{</span>sock<span style="color:#f92672">.</span>recv(<span style="color:#ae81ff">4096</span>)<span style="color:#f92672">.</span>decode()<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>)    <span style="color:#75715e"># 不要错过flag消息</span>
+</span></span><span style="display:flex;"><span>    print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;msg:</span><span style="color:#e6db74">{</span>sock<span style="color:#f92672">.</span>recv(<span style="color:#ae81ff">4096</span>)<span style="color:#f92672">.</span>decode()<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>)    <span style="color:#75715e"># 不要错过flag消息</span>
+</span></span><span style="display:flex;"><span>    print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;msg:</span><span style="color:#e6db74">{</span>sock<span style="color:#f92672">.</span>recv(<span style="color:#ae81ff">4096</span>)<span style="color:#f92672">.</span>decode()<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>)    <span style="color:#75715e"># 不要错过flag消息</span>
+</span></span><span style="display:flex;"><span>    print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;msg:</span><span style="color:#e6db74">{</span>sock<span style="color:#f92672">.</span>recv(<span style="color:#ae81ff">4096</span>)<span style="color:#f92672">.</span>decode()<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>)    <span style="color:#75715e"># 不要错过flag消息</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">except</span> <span style="color:#a6e22e">Exception</span> <span style="color:#66d9ef">as</span> e:
+</span></span><span style="display:flex;"><span>    print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;error:</span><span style="color:#e6db74">{</span>e<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>)
+</span></span><span style="display:flex;"><span>    sock<span style="color:#f92672">.</span>close()
+</span></span></code></pre></div><hr>
+<h3 id="学习资料-1-4">学习资料 1-4
+</h3><p>纯纯工具送分题</p>
+<h4 id="1">1
+</h4><p>内存镜像是 <code>.elf</code> 格式的，看了一下重新下了个volatility3，旧的不支持
+用 <code>vol.exe</code> 查看镜像信息即得
+<img src="/1.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="1"
+	
+	
+></p>
+<h4 id="2">2
+</h4><p>用 <code>vol.exe -f dump.elf windows.hashdump</code>得到了密码的hash，在线爆破得到密码提交flag</p>
+<h4 id="3">3
+</h4><p><code>vol.exe -f dump.elf windows.pslist</code>查看进程
+<img src="/3-1.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="3"
+	
+	
+>
+<img src="/3-2.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="3"
+	
+	
+></p>
+<h4 id="4">4
+</h4><p><code>vol.exe -f dump.elf windows.filescan | findstr 'flag'</code></p>
+<p>中间因为路径中有 <code>\u</code> 的干扰，所以在volatility3中的<code>text_render.py</code>的那一块加了个<code>try-expect</code></p>
+<p>找到<code>flag.txt</code>之后用<code>vol.exe -f dump.elf windows.dumpfile</code>提取得到flag</p>
+<hr>
+<h3 id="学习资料5">学习资料5
+</h3><p>流量分析题+一堆乱七八糟的东西
+首先搭建一个MC服务器，登录到服务器，想到题干中的<code>还是说......这个世界的**规则**不一样？</code>想到<strong>指令</strong></p>
+<p>用 <code>/help</code> 一查看发现有个<code>/decodeblock</code>指令，用这个指令得到了<code>flag.pcapng</code>，但是用wireshark打不开，用winhex查看了文件头不是很常见，（找出题人要了个hint），说要用到java反编译，用jd-gui看到了插件的源码找到了问题所在</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">for</span> (<span style="color:#66d9ef">int</span> i <span style="color:#f92672">=</span> 0; i <span style="color:#f92672">&lt;</span> data.<span style="color:#a6e22e">length</span>; i<span style="color:#f92672">++</span>)
+</span></span><span style="display:flex;"><span>        data<span style="color:#f92672">[</span>i<span style="color:#f92672">]</span> <span style="color:#f92672">=</span> (<span style="color:#66d9ef">byte</span>)(data<span style="color:#f92672">[</span>i<span style="color:#f92672">]</span> <span style="color:#f92672">^</span> 0xFF); 
+</span></span><span style="display:flex;"><span>      String base64String <span style="color:#f92672">=</span> Base64.<span style="color:#a6e22e">getEncoder</span>().<span style="color:#a6e22e">encodeToString</span>(data);
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">return</span> base64String.<span style="color:#a6e22e">getBytes</span>();
+</span></span></code></pre></div><p>写了个脚本复原</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">import</span> base64
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">with</span> open(<span style="color:#e6db74">&#34;flag.pcapng&#34;</span>,<span style="color:#e6db74">&#34;rb&#34;</span>) <span style="color:#66d9ef">as</span> f:
+</span></span><span style="display:flex;"><span>    data <span style="color:#f92672">=</span> f<span style="color:#f92672">.</span>read()
+</span></span><span style="display:flex;"><span>    data <span style="color:#f92672">=</span> base64<span style="color:#f92672">.</span>b64decode(data<span style="color:#f92672">.</span>decode())
+</span></span><span style="display:flex;"><span>    new_data <span style="color:#f92672">=</span> <span style="color:#e6db74">b</span><span style="color:#e6db74">&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(len(data)):
+</span></span><span style="display:flex;"><span>        new_data <span style="color:#f92672">+=</span> (data[i] <span style="color:#f92672">^</span> <span style="color:#ae81ff">0xFF</span>)<span style="color:#f92672">.</span>to_bytes(<span style="color:#ae81ff">1</span>,<span style="color:#e6db74">&#34;big&#34;</span>)
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">with</span> open(<span style="color:#e6db74">&#34;flag_decoded.pcapng&#34;</span>,<span style="color:#e6db74">&#34;wb&#34;</span>) <span style="color:#66d9ef">as</span> f:
+</span></span><span style="display:flex;"><span>    f<span style="color:#f92672">.</span>write(new_data)
+</span></span></code></pre></div><p>发现又打不开，再看发现是zip的文件头，改了后缀，解压发现要密码。刚开始就拉到最下面看了一眼发现了<code>Is password real?</code>的提示，刚开始还傻傻的试了<code>real</code>和<code>real?</code>，后来意识过来时伪加密，把标志位一改就解压出来了。</p>
+<p>用<code>tshark -r flag.pcapng -T field -e usb.capdata &gt;data.txt</code>提取出数据，在wireshark中分析了好久，应该是键盘数据，但是有0104的也有0100的，查了一下0104的是按住了右alt，0100应该就是松开了，自己试着跟着按了一下，发现打出中文字了。去查原理，发现Windows里面Alt+小键盘输入中文字符的gbk编码可以直接输出字符。立马开写脚本。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">with</span> open(<span style="color:#e6db74">&#34;usbdata.txt&#34;</span>, <span style="color:#e6db74">&#34;r&#34;</span>, encoding<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;utf-8&#34;</span>) <span style="color:#66d9ef">as</span> f:
+</span></span><span style="display:flex;"><span>    data <span style="color:#f92672">=</span> f<span style="color:#f92672">.</span>readlines()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>data <span style="color:#f92672">=</span> [i<span style="color:#f92672">.</span>strip() <span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> data <span style="color:#66d9ef">if</span> i<span style="color:#f92672">.</span>strip()]
+</span></span><span style="display:flex;"><span>keys <span style="color:#f92672">=</span> [key[:<span style="color:#ae81ff">8</span>] <span style="color:#66d9ef">for</span> key <span style="color:#f92672">in</span> data]
+</span></span><span style="display:flex;"><span>vaild_keys <span style="color:#f92672">=</span> [key[<span style="color:#f92672">-</span><span style="color:#ae81ff">2</span>:] <span style="color:#66d9ef">for</span> key <span style="color:#f92672">in</span> keys <span style="color:#66d9ef">if</span> (key[<span style="color:#f92672">-</span><span style="color:#ae81ff">2</span>:] <span style="color:#f92672">!=</span> <span style="color:#e6db74">&#34;00&#34;</span> <span style="color:#f92672">or</span> key[:<span style="color:#ae81ff">4</span>] <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;0100&#34;</span>) ]
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># print(keys)</span>
+</span></span><span style="display:flex;"><span>print(vaild_keys)
+</span></span><span style="display:flex;"><span>mapping <span style="color:#f92672">=</span> {<span style="color:#e6db74">&#34;59&#34;</span>: <span style="color:#e6db74">&#34;1&#34;</span>,<span style="color:#e6db74">&#34;5a&#34;</span>: <span style="color:#e6db74">&#34;2&#34;</span>,<span style="color:#e6db74">&#34;5b&#34;</span>: <span style="color:#e6db74">&#34;3&#34;</span>,<span style="color:#e6db74">&#34;5c&#34;</span>: <span style="color:#e6db74">&#34;4&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;5d&#34;</span>: <span style="color:#e6db74">&#34;5&#34;</span>, <span style="color:#e6db74">&#34;5e&#34;</span>: <span style="color:#e6db74">&#34;6&#34;</span>,<span style="color:#e6db74">&#34;5f&#34;</span>: <span style="color:#e6db74">&#34;7&#34;</span>,<span style="color:#e6db74">&#34;60&#34;</span>: <span style="color:#e6db74">&#34;8&#34;</span>,<span style="color:#e6db74">&#34;61&#34;</span>: <span style="color:#e6db74">&#34;9&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;62&#34;</span>: <span style="color:#e6db74">&#34;0&#34;</span>}
+</span></span><span style="display:flex;"><span>nums <span style="color:#f92672">=</span> []
+</span></span><span style="display:flex;"><span>num <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> key <span style="color:#f92672">in</span> vaild_keys:
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> key <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;00&#34;</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> num:
+</span></span><span style="display:flex;"><span>            nums<span style="color:#f92672">.</span>append(int(num))
+</span></span><span style="display:flex;"><span>            num <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">else</span>:
+</span></span><span style="display:flex;"><span>        num <span style="color:#f92672">+=</span> mapping[key]
+</span></span><span style="display:flex;"><span>print(nums)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">gbk_char_from_decimal</span>(decimal_code):
+</span></span><span style="display:flex;"><span>    gbk_bytes <span style="color:#f92672">=</span> decimal_code<span style="color:#f92672">.</span>to_bytes(<span style="color:#ae81ff">2</span>, byteorder<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;big&#39;</span>)
+</span></span><span style="display:flex;"><span>    char <span style="color:#f92672">=</span> gbk_bytes<span style="color:#f92672">.</span>decode(<span style="color:#e6db74">&#39;gbk&#39;</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> char
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>chars <span style="color:#f92672">=</span> [gbk_char_from_decimal(num) <span style="color:#66d9ef">for</span> num <span style="color:#f92672">in</span> nums]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>print(chars)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">with</span> open(<span style="color:#e6db74">&#34;decoded.txt&#34;</span>, <span style="color:#e6db74">&#34;w&#34;</span>, encoding<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;utf-8&#34;</span>) <span style="color:#66d9ef">as</span> f:
+</span></span><span style="display:flex;"><span>    f<span style="color:#f92672">.</span>write(<span style="color:#e6db74">&#34;&#34;</span><span style="color:#f92672">.</span>join(chars))
+</span></span></code></pre></div><p>得到
+<code>熊曰：呋食食出魚常住呱嗡和註誘嗄萌喜圖嗚果哞誘類圖家萌偶物冬噗誘哮洞取啽更雜住嘿嗷有呱性發歡洞捕捕哈洞嘶麼肉家嗥嚄果偶很冬我盜物物嚁囑呦嗄肉笨會告覺哞嗷取呆現喜笨寶噤肉冬</code></p>
+<p>想起宣讲会上说的，是与熊论道的编码，解了一下码得到<code>U2FsdGVkX18Zz1n2/ZeYSxuFpzOndISllRaiaHVfZ9NZfBC4YbUdCpCttVujDi5r</code>用<code>CyberChef</code>bake了一下发现加盐了（找出题人要了一下hint），在MC的告示牌里得到了密钥是<code>nothing</code>，解密AES得到flag</p>
+<h3 id="熟摩棍哥">熟摩棍哥
+</h3><p>读了题目立马想到摩斯电码。刚好整个音频里只有<code>冲</code>和<code>冲刺</code></p>
+<p>一开始把<code>冲</code>对应的<code>.</code>，发现有一个始终找不到对应，就换了一下<code>冲</code>对应到<code>-</code>就对了。翻译完看到<code>===</code>想到是被编码了，直接<code>CyberChef</code>解决。</p>
+<h2 id="web">Web
+</h2><h3 id="set-set-whatweb-签到">set set what(WEB 签到)
+</h3><p>在公告里找到了出题人的QQ，把滑动条的max设置成出题人QQ，直接拉到最后得到了flag</p>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+
+    </footer>
+
+
+    
+</article>
+
+    
+
+    
+
+     
+    
+        
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+        2024 XiaoYuan Blog
+    </section>
+    
+    <section class="powerby">
+        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.27.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css"crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
+            >
+
+            </main>
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/ts/main.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>
