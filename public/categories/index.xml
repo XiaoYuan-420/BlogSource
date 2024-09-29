@@ -6,6 +6,15 @@
         <description>Recent content in Categories on 萧垣的博客</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
-        <copyright>XiaoYuan</copyright><atom:link href="http://localhost:1313/categories/index.xml" rel="self" type="application/rss+xml" />
+        <copyright>XiaoYuan</copyright>
+        <lastBuildDate>Sat, 28 Sep 2024 11:12:41 +0800</lastBuildDate><atom:link href="http://localhost:1313/categories/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>CTF</title>
+        <link>http://localhost:1313/categories/ctf/</link>
+        <pubDate>Sat, 28 Sep 2024 11:12:41 +0800</pubDate>
+        
+        <guid>http://localhost:1313/categories/ctf/</guid>
+        <description></description>
+        </item>
+        
     </channel>
 </rss>

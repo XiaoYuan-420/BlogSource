@@ -8,6 +8,12 @@ license:
 hidden: false
 comments: true
 draft: false
+categories:
+    - CTF
+tags:
+    - CTF
+    - misc
+    - 取证
 ---
 # TSCTF-J XiaoYuan Writeup
 
