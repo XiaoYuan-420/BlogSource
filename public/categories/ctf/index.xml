@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
     <channel>
         <title>CTF on 萧垣的博客</title>
-        <link>http://localhost:8067/categories/ctf/</link>
+        <link>http://localhost:1313/categories/ctf/</link>
         <description>Recent content in CTF on 萧垣的博客</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
         <copyright>XiaoYuan</copyright>
-        <lastBuildDate>Sat, 28 Sep 2024 11:12:41 +0800</lastBuildDate><atom:link href="http://localhost:8067/categories/ctf/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Sat, 28 Sep 2024 11:12:41 +0800</lastBuildDate><atom:link href="http://localhost:1313/categories/ctf/index.xml" rel="self" type="application/rss+xml" /><item>
         <title>TSCTF-J wp</title>
-        <link>http://localhost:8067/p/tsctf-j-wp/</link>
+        <link>http://localhost:1313/p/tsctf-j-wp/</link>
         <pubDate>Sat, 28 Sep 2024 11:12:41 +0800</pubDate>
         
-        <guid>http://localhost:8067/p/tsctf-j-wp/</guid>
+        <guid>http://localhost:1313/p/tsctf-j-wp/</guid>
         <description>&lt;h1 id=&#34;tsctf-j-xiaoyuan-writeup&#34;&gt;TSCTF-J XiaoYuan Writeup
 &lt;/h1&gt;&lt;h2 id=&#34;misc&#34;&gt;MISC
 &lt;/h2&gt;&lt;hr&gt;
@@ -429,7 +429,7 @@
 &lt;h4 id=&#34;1&#34;&gt;1
 &lt;/h4&gt;&lt;p&gt;内存镜像是 &lt;code&gt;.elf&lt;/code&gt; 格式的，看了一下重新下了个volatility3，旧的不支持
 用 &lt;code&gt;vol.exe&lt;/code&gt; 查看镜像信息即得
-&lt;img src=&#34;http://localhost:8067/1.png&#34;
+&lt;img src=&#34;http://localhost:1313/1.png&#34;
 	
 	
 	
@@ -443,7 +443,7 @@
 &lt;/h4&gt;&lt;p&gt;用 &lt;code&gt;vol.exe -f dump.elf windows.hashdump&lt;/code&gt;得到了密码的hash，在线爆破得到密码提交flag&lt;/p&gt;
 &lt;h4 id=&#34;3&#34;&gt;3
 &lt;/h4&gt;&lt;p&gt;&lt;code&gt;vol.exe -f dump.elf windows.pslist&lt;/code&gt;查看进程
-&lt;img src=&#34;http://localhost:8067/3-1.png&#34;
+&lt;img src=&#34;http://localhost:1313/3-1.png&#34;
 	
 	
 	
@@ -453,7 +453,7 @@
 	
 	
 &gt;
-&lt;img src=&#34;http://localhost:8067/3-2.png&#34;
+&lt;img src=&#34;http://localhost:1313/3-2.png&#34;
 	
 	
 	

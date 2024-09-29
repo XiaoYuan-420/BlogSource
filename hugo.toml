@@ -6,13 +6,6 @@ copyright = "XiaoYuan"
 DefaultContentLanguage = "zh-cn"
 hasCJKLanguage = true
 
-[languages.en]
-languageName = "English"
-title = "XiaoYuan"
-weight = 1
-
-  [languages.en.params]
-  description = "na na na"
 
 [languages.zh-cn]
 languageName = "中文"

@@ -610,7 +610,15 @@
         <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
         
         <guid>http://localhost:1313/about/</guid>
-        <description>&lt;p&gt;This is a test page for i18n support.&lt;/p&gt;
+        <description>&lt;p&gt;Hello，这里是萧垣，一名清澈且愚蠢的大学生。&lt;/p&gt;
+&lt;p&gt;这是我的&lt;a class=&#34;link&#34; href=&#34;https://space.bilibili.com/355858066&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Bilibili&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;这是我的&lt;a class=&#34;link&#34; href=&#34;https://github.com/NTFago&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;GitHub&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;这是我的&lt;a class=&#34;link&#34; href=&#34;https://space.bilibili.com/1764320858&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Bilibili小号&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;这是我的&lt;a class=&#34;link&#34; href=&#34;https://github.com/XiaoYuan-420&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;GitHub小号&lt;/a&gt;&lt;/p&gt;
 </description>
         </item>
         <item>
