@@ -2,61 +2,68 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>http://localhost:1313/categories/</loc>
+    <loc>http://localhost:8067/categories/</loc>
     <lastmod>2024-09-28T11:12:41+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
-                href="http://localhost:1313/en/categories/"
+                href="http://localhost:8067/en/categories/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-cn"
-                href="http://localhost:1313/categories/"
+                href="http://localhost:8067/categories/"
                 />
   </url><url>
-    <loc>http://localhost:1313/tags/ctf/</loc>
+    <loc>http://localhost:8067/tags/ctf/</loc>
     <lastmod>2024-09-28T11:12:41+08:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/categories/ctf/</loc>
+    <loc>http://localhost:8067/categories/ctf/</loc>
     <lastmod>2024-09-28T11:12:41+08:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/tags/misc/</loc>
+    <loc>http://localhost:8067/tags/misc/</loc>
     <lastmod>2024-09-28T11:12:41+08:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/post/</loc>
+    <loc>http://localhost:8067/post/</loc>
     <lastmod>2024-09-28T11:12:41+08:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/tags/</loc>
+    <loc>http://localhost:8067/tags/</loc>
     <lastmod>2024-09-28T11:12:41+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
-                href="http://localhost:1313/en/tags/"
+                href="http://localhost:8067/en/tags/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-cn"
-                href="http://localhost:1313/tags/"
+                href="http://localhost:8067/tags/"
                 />
   </url><url>
-    <loc>http://localhost:1313/p/tsctf-j-wp/</loc>
+    <loc>http://localhost:8067/p/tsctf-j-wp/</loc>
     <lastmod>2024-09-28T11:12:41+08:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/tags/%E5%8F%96%E8%AF%81/</loc>
+    <loc>http://localhost:8067/tags/%E5%8F%96%E8%AF%81/</loc>
     <lastmod>2024-09-28T11:12:41+08:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/</loc>
+    <loc>http://localhost:8067/</loc>
     <lastmod>2024-09-28T11:12:41+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
-                href="http://localhost:1313/en/"
+                href="http://localhost:8067/en/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-cn"
-                href="http://localhost:1313/"
+                href="http://localhost:8067/"
                 />
+  </url><url>
+    <loc>http://localhost:8067/archives/</loc>
+    <lastmod>2019-05-28T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>http://localhost:8067/search/</loc>
+  </url><url>
+    <loc>http://localhost:8067/about/</loc>
   </url>
 </urlset>
