@@ -99,6 +99,8 @@ favicon = "/favicon.ico"
     [params.comments.giscus]
     repo = "XiaoYuan-420/XiaoYuan-420.github.io"
     repoID = "R_kgDOM4D09g"
+    category = "Announcements"
+    categoryID = "DIC_kwDOM4D09s4Ci3v5"
     mapping = "pathname"
     lightTheme = "preferred_color_scheme"
     darkTheme =  "dark_tritanopia"
@@ -162,12 +164,12 @@ main = [ ]
     icon = "brand-github"
 
   [[menu.social]]
-  identifier = "twitter"
-  name = "Twitter"
-  url = "https://twitter.com"
+  identifier = "bilibili"
+  name = "Bilibili"
+  url = "https://space.bilibili.com/355858066"
 
     [menu.social.params]
-    icon = "brand-twitter"
+    icon = "brand-bilibili"
 
 [related]
 includeNewer = true
