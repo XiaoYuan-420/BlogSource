@@ -19,7 +19,7 @@ weight = 2
 shortname = "hugo-theme-stack"
 
 [services.rss]
-limit = -1
+limit = 20
 
 [services.googleAnalytics]
 
