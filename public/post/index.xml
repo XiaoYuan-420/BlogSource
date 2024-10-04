@@ -6,12 +6,14 @@
         <description>Recent content in Posts on 萧垣的博客</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
+        <managingEditor>2024211570@bupt.cn (XiaoYuan)</managingEditor>
+        <webMaster>2024211570@bupt.cn (XiaoYuan)</webMaster>
         <copyright>XiaoYuan</copyright>
         <lastBuildDate>Mon, 30 Sep 2024 11:12:41 +0800</lastBuildDate><atom:link href="http://localhost:1313/post/index.xml" rel="self" type="application/rss+xml" /><item>
         <title>Python基础知识</title>
         <link>http://localhost:1313/p/python%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/</link>
         <pubDate>Mon, 30 Sep 2024 11:12:41 +0800</pubDate>
-        
+        <author>2024211570@bupt.cn (XiaoYuan)</author>
         <guid>http://localhost:1313/p/python%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/</guid>
         <description>&lt;h1 id=&#34;python基础知识&#34;&gt;Python基础知识
 &lt;/h1&gt;&lt;h2 id=&#34;学前提醒&#34;&gt;学前提醒
@@ -502,7 +504,7 @@ C 12
         <title>TSCTF-J wp</title>
         <link>http://localhost:1313/p/tsctf-j-wp/</link>
         <pubDate>Sat, 28 Sep 2024 11:12:41 +0800</pubDate>
-        
+        <author>2024211570@bupt.cn (XiaoYuan)</author>
         <guid>http://localhost:1313/p/tsctf-j-wp/</guid>
         <description>&lt;h1 id=&#34;tsctf-j-xiaoyuan-writeup&#34;&gt;TSCTF-J XiaoYuan Writeup
 &lt;/h1&gt;&lt;h2 id=&#34;misc&#34;&gt;MISC

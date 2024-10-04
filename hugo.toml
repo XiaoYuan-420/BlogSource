@@ -18,6 +18,9 @@ weight = 2
 [services.disqus]
 shortname = "hugo-theme-stack"
 
+[services.rss]
+limit = -1
+
 [services.googleAnalytics]
 
 [pagination]
@@ -32,6 +35,9 @@ mainSections = [ "post" ]
 featuredImageField = "image"
 rssFullContent = true
 favicon = "/favicon.ico"
+  [params.author]
+    email = "2024211570@bupt.cn"
+    name = "XiaoYuan"
 
   [params.footer]
   since = 2_024
@@ -163,6 +169,13 @@ main = [ ]
 
     [menu.social.params]
     icon = "brand-bilibili"
+  
+  [[menu.social]]
+  identifier = "rss"
+  name = "RSS"
+  url = "/index.xml"
+    [menu.social.params]
+    icon = "rss"
 
 [related]
 includeNewer = true
@@ -200,3 +213,9 @@ lineNoStart = 1
 lineNos = true
 lineNumbersInTable = true
 tabWidth = 4
+
+[outputs]
+home = ['html', 'rss']
+section = ['html', 'rss']
+taxonomy = ['html']
+term = ['html']
