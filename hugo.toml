@@ -41,6 +41,9 @@ favicon = "/favicon.ico"
 
   [params.footer]
   since = 2_024
+  customText = """网站总访客数：<span id='busuanzi_value_site_uv'>Loading</span><br/>
+      网站总访问量：<span id='busuanzi_value_site_pv'>Loading</span>
+     """
 
   [params.dateFormat]
   published = "2006-01-02"
