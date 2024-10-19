@@ -2,8 +2,29 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
+    <loc>http://localhost:1313/tags/ai/</loc>
+    <lastmod>2024-10-19T15:41:42+08:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/categories/ai/</loc>
+    <lastmod>2024-10-19T15:41:42+08:00</lastmod>
+  </url><url>
     <loc>http://localhost:1313/categories/</loc>
-    <lastmod>2024-10-05T14:45:13+08:00</lastmod>
+    <lastmod>2024-10-19T15:41:42+08:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/intro/</loc>
+    <lastmod>2024-10-19T15:41:42+08:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/tags/</loc>
+    <lastmod>2024-10-19T15:41:42+08:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/tags/%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92/</loc>
+    <lastmod>2024-10-19T15:41:42+08:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/</loc>
+    <lastmod>2024-10-19T15:41:42+08:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</loc>
+    <lastmod>2024-10-19T15:41:42+08:00</lastmod>
   </url><url>
     <loc>http://localhost:1313/tags/ctf/</loc>
     <lastmod>2024-10-05T14:45:13+08:00</lastmod>
@@ -20,16 +41,10 @@
     <loc>http://localhost:1313/post/</loc>
     <lastmod>2024-10-05T14:45:13+08:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/tags/</loc>
-    <lastmod>2024-10-05T14:45:13+08:00</lastmod>
-  </url><url>
     <loc>http://localhost:1313/tags/web/</loc>
     <lastmod>2024-10-05T14:45:13+08:00</lastmod>
   </url><url>
     <loc>http://localhost:1313/tags/wp/</loc>
-    <lastmod>2024-10-05T14:45:13+08:00</lastmod>
-  </url><url>
-    <loc>http://localhost:1313/</loc>
     <lastmod>2024-10-05T14:45:13+08:00</lastmod>
   </url><url>
     <loc>http://localhost:1313/tags/python/</loc>

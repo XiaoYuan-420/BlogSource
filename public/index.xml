@@ -9,7 +9,75 @@
         <managingEditor>2024211570@bupt.cn (XiaoYuan)</managingEditor>
         <webMaster>2024211570@bupt.cn (XiaoYuan)</webMaster>
         <copyright>XiaoYuan</copyright>
-        <lastBuildDate>Sat, 05 Oct 2024 14:45:13 +0800</lastBuildDate><atom:link href="http://localhost:1313/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Sat, 19 Oct 2024 15:41:42 +0800</lastBuildDate><atom:link href="http://localhost:1313/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>Intro</title>
+        <link>http://localhost:1313/p/intro/</link>
+        <pubDate>Sat, 19 Oct 2024 15:41:42 +0800</pubDate>
+        <author>2024211570@bupt.cn (XiaoYuan)</author>
+        <guid>http://localhost:1313/p/intro/</guid>
+        <description>&lt;h1 id=&#34;intro&#34;&gt;Intro
+&lt;/h1&gt;&lt;h2 id=&#34;what-is-machine-learning&#34;&gt;what is machine learning
+&lt;/h2&gt;&lt;ol&gt;
+&lt;li&gt;让机器具备找一个函数的能力
+&lt;ol&gt;
+&lt;li&gt;语音识别
+&lt;blockquote&gt;
+&lt;p&gt;输入：声音信号&lt;/p&gt;
+&lt;p&gt;输出：文字&lt;/p&gt;
+&lt;p&gt;这个函数很复杂，人类无法编写出，让机器自己找到这个函数的过程便是机器学习&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;/li&gt;
+&lt;li&gt;图像识别&lt;/li&gt;
+&lt;li&gt;阿尔法狗&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&#34;different-types-of-function&#34;&gt;different types of function
+&lt;/h2&gt;&lt;ol&gt;
+&lt;li&gt;&lt;code&gt;regression&lt;/code&gt;：输出为数值（scalar）&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;classification&lt;/code&gt;：分类（classes）&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;structured learning&lt;/code&gt;：创造&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&#34;training&#34;&gt;training
+&lt;/h2&gt;&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;含参函数&lt;/p&gt;
+&lt;p&gt;$y = b + wx_1$ -&amp;gt; &lt;code&gt;Model&lt;/code&gt; -&amp;gt; &lt;code&gt;Linear&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;$x,y$ -&amp;gt; &lt;code&gt;feature&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;$w$ -&amp;gt; &lt;code&gt;weight&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;$b$ -&amp;gt; &lt;code&gt;bias&lt;/code&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Loss&lt;/p&gt;
+&lt;p&gt;$L(b, w)$ 来自于训练集&lt;/p&gt;
+&lt;p&gt;$x_1$ -&amp;gt; $0.5k + 1x_1 = y$ -&amp;gt; $\widehat{y}$ -&amp;gt; &lt;code&gt;label&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;$e_1 = |y - \widehat{y}| &amp;hellip;$ -&amp;gt; &lt;code&gt;Loss&lt;/code&gt;: $L = \frac{1}{N}\sum_{n}^N e_n$&lt;/p&gt;
+&lt;p&gt;$e = |y - \widehat{y}|$ -&amp;gt; &lt;code&gt;MAE&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;$e = (y - \widehat{y})^2$ -&amp;gt; &lt;code&gt;MSE&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;If $y$ and $\widehat{y}$ are bath probability distributions -&amp;gt; &lt;code&gt;Cross-entropy&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;error surface&lt;/code&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;optimization&lt;/p&gt;
+&lt;p&gt;$w^&lt;em&gt;, b^&lt;/em&gt; = arg \min_{w, b}{L}$&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;&lt;code&gt;gradient descent&lt;/code&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;随机选取 $w^0$&lt;/li&gt;
+&lt;li&gt;计算 $w$ 对 $L$ 的微分在$w^0$处的值&lt;/li&gt;
+&lt;li&gt;斜率为负，增加 $w$ ；斜率为正，减小 $w$&lt;/li&gt;
+&lt;li&gt;增大和减小的数值根据&lt;code&gt;斜率&lt;/code&gt;和&lt;code&gt;学习率来决定&lt;/code&gt; &lt;code&gt;hyperparameters&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;$w^0$ -&amp;gt; $w^1$ -&amp;gt; &amp;hellip;&lt;/li&gt;
+&lt;li&gt;更新次数/$w^tt = 0$ 停止&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;global minima&lt;/code&gt; &lt;code&gt;local minima&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;evaluation&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+</description>
+        </item>
+        <item>
         <title>NewStar 第一周 WP</title>
         <link>http://localhost:1313/p/newstar-%E7%AC%AC%E4%B8%80%E5%91%A8-wp/</link>
         <pubDate>Sat, 05 Oct 2024 14:45:13 +0800</pubDate>
