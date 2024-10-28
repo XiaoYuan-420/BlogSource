@@ -2,34 +2,43 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>http://localhost:1313/p/buildctf-wp-misc%E9%83%A8%E5%88%86/</loc>
-    <lastmod>2024-10-24T22:35:40+08:00</lastmod>
+    <loc>http://localhost:1313/tags/base%E5%AE%B6%E6%97%8F/</loc>
+    <lastmod>2024-10-28T15:43:08+08:00</lastmod>
   </url><url>
     <loc>http://localhost:1313/categories/</loc>
-    <lastmod>2024-10-24T22:35:40+08:00</lastmod>
+    <lastmod>2024-10-28T15:43:08+08:00</lastmod>
   </url><url>
     <loc>http://localhost:1313/tags/ctf/</loc>
-    <lastmod>2024-10-24T22:35:40+08:00</lastmod>
+    <lastmod>2024-10-28T15:43:08+08:00</lastmod>
   </url><url>
     <loc>http://localhost:1313/categories/ctf/</loc>
-    <lastmod>2024-10-24T22:35:40+08:00</lastmod>
+    <lastmod>2024-10-28T15:43:08+08:00</lastmod>
   </url><url>
     <loc>http://localhost:1313/tags/misc/</loc>
-    <lastmod>2024-10-24T22:35:40+08:00</lastmod>
+    <lastmod>2024-10-28T15:43:08+08:00</lastmod>
   </url><url>
     <loc>http://localhost:1313/post/</loc>
-    <lastmod>2024-10-24T22:35:40+08:00</lastmod>
+    <lastmod>2024-10-28T15:43:08+08:00</lastmod>
   </url><url>
     <loc>http://localhost:1313/tags/</loc>
+    <lastmod>2024-10-28T15:43:08+08:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/tags/%E7%BC%96%E7%A0%81/</loc>
+    <lastmod>2024-10-28T15:43:08+08:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/p/%E7%BC%96%E7%A0%81%E7%B3%BB%E5%88%97/</loc>
+    <lastmod>2024-10-28T15:43:08+08:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/</loc>
+    <lastmod>2024-10-28T15:43:08+08:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/p/buildctf-wp-misc%E9%83%A8%E5%88%86/</loc>
     <lastmod>2024-10-24T22:35:40+08:00</lastmod>
   </url><url>
     <loc>http://localhost:1313/tags/wp/</loc>
     <lastmod>2024-10-24T22:35:40+08:00</lastmod>
   </url><url>
     <loc>http://localhost:1313/tags/%E5%8F%96%E8%AF%81/</loc>
-    <lastmod>2024-10-24T22:35:40+08:00</lastmod>
-  </url><url>
-    <loc>http://localhost:1313/</loc>
     <lastmod>2024-10-24T22:35:40+08:00</lastmod>
   </url><url>
     <loc>http://localhost:1313/tags/ai/</loc>

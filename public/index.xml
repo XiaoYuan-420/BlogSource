@@ -9,14 +9,262 @@
         <managingEditor>2024211570@bupt.cn (XiaoYuan)</managingEditor>
         <webMaster>2024211570@bupt.cn (XiaoYuan)</webMaster>
         <copyright>XiaoYuan</copyright>
-        <lastBuildDate>Thu, 24 Oct 2024 22:35:40 +0800</lastBuildDate><atom:link href="http://localhost:1313/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Mon, 28 Oct 2024 15:43:08 +0800</lastBuildDate><atom:link href="http://localhost:1313/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>编码系列</title>
+        <link>http://localhost:1313/p/%E7%BC%96%E7%A0%81%E7%B3%BB%E5%88%97/</link>
+        <pubDate>Mon, 28 Oct 2024 15:43:08 +0800</pubDate>
+        <author>2024211570@bupt.cn (XiaoYuan)</author>
+        <guid>http://localhost:1313/p/%E7%BC%96%E7%A0%81%E7%B3%BB%E5%88%97/</guid>
+        <description>&lt;h1 id=&#34;编码系列持续更新&#34;&gt;编码系列(持续更新)
+&lt;/h1&gt;&lt;h2 id=&#34;base家族&#34;&gt;Base家族
+&lt;/h2&gt;&lt;h3 id=&#34;base16&#34;&gt;Base16
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;使用16个ASCII可打印字符（数字0-9和字母A-F），对任意字节数据进行编码。&lt;/li&gt;
+&lt;li&gt;先获取输入字符串每个字节的二进制值（不足8比特在高位补0），然后将其串联进来，再按照4比特一组进行切分，将每组二进制数分别转换成十进制。&lt;/li&gt;
+&lt;li&gt;Base16编码后的数据量是原数据的两倍：1000比特数据需要250个字符（即 250*8=2000 比特）。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;注：&lt;/strong&gt; 可以看到8比特数据按照4比特切分刚好是两组，所以Base16不可能用到填充符号&lt;code&gt;=&lt;/code&gt;。&lt;/p&gt;
+&lt;p&gt;换句话说：Base16使用两个ASCII字符去编码原数据中的一个字节数据。&lt;/p&gt;
+&lt;p&gt;Base16编码是一个标准的十六进制字符串（注意是字符串而不是数值），更易被人类和计算机使用，因为它并不包含任何控制字符，以及Base64和Base32中的&lt;code&gt;=&lt;/code&gt;符号。&lt;/p&gt;
+&lt;h3 id=&#34;base32&#34;&gt;Base32
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;Base32编码是使用32个可打印字符（字母A-Z和数字2-7）对任意字节数据进行编码的方案，编码后的字符串不用区分大小写并排除了容易混淆的字符，可以方便地由人类使用并由计算机处理。&lt;/li&gt;
+&lt;li&gt;Base32主要用于编码二进制数据，但是Base32也能够编码诸如ASCII之类的二进制文本。&lt;/li&gt;
+&lt;li&gt;Base32将任意字符串按照字节进行切分，并将每个字节对应的二进制值（不足8比特高位补0）串联起来，按照5比特一组进行切分，并将每组二进制值转换成十进制来对应32个可打印字符中的一个。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;由于数据的二进制传输是按照8比特一组进行（即一个字节），因此Base32按5比特切分的二进制数据必须是40比特的倍数（5和8的最小公倍数）。&lt;/p&gt;
+&lt;p&gt;例如输入单字节字符&lt;code&gt;%&lt;/code&gt;，它对应的二进制值是&lt;code&gt;100101&lt;/code&gt;，前面补两个0变成&lt;code&gt;00100101&lt;/code&gt;（二进制值不足8比特的都要在高位加0直到8比特），从左侧开始按照5比特切分成两组：&lt;code&gt;00100&lt;/code&gt;和&lt;code&gt;101&lt;/code&gt;，后一组不足5比特，则在末尾填充0直到5比特，变成&lt;code&gt;00100&lt;/code&gt;和&lt;code&gt;10100&lt;/code&gt;，这两组二进制数分别转换成十进制数，通过上述表格即可找到其对应的可打印字符&lt;code&gt;E&lt;/code&gt;和&lt;code&gt;U&lt;/code&gt;，但是这里只用到两组共10比特，还差30比特达到40比特，按照5比特一组还需6组，则在末尾填充6个&lt;code&gt;=&lt;/code&gt;。填充&lt;code&gt;=&lt;/code&gt;符号的作用是方便一些程序的标准化运行，大多数情况下不添加也无关紧要，而且，在URL中使用时必须去掉&lt;code&gt;=&lt;/code&gt;符号。&lt;/p&gt;
+&lt;h3 id=&#34;base64&#34;&gt;Base64
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;Base64是一种基于64个可打印字符来表示二进制数据的表示方法。由于 $2^6=64$ ，所以每6个比特为一个单元，对应某个可打印字符。3个字节有24个比特，对应于4个Base64单元，即3个字节可由4个可打印字符来表示。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;注：BinHex的版本使用不同的64字符集来代表6个二进制数字，但是不被称为Base64。&lt;/p&gt;
+&lt;p&gt;如果要编码的字节数不能被3整除，最后会多出1个或2个字节，那么可以使用下面的方法进行处理：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;先使用0字节值在末尾补足，使其能够被3整除，然后再进行Base64的编码。&lt;/li&gt;
+&lt;li&gt;在编码后的Base64文本后加上一个或两个=号，代表补足的字节数。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;也就是说：&lt;/p&gt;
+&lt;p&gt;当最后剩余两个八位(待补足)字节（2个byte）时，最后一个6位的Base64字节块有四位是0值，最后附加上两个等号；&lt;/p&gt;
+&lt;p&gt;如果最后剩余一个八位(待补足)字节（1个byte）时，最后一个6位的base字节块有两位是0值，最后附加一个等号。&lt;/p&gt;
+&lt;h2 id=&#34;md5&#34;&gt;MD5
+&lt;/h2&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;6
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;明文：admin
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;32位小写21232f297a57a5a743894a0e4a801fc3 
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;32位大写21232F297A57A5A743894A0E4A801FC3 
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;16位小写7a57a5a743894a0e 
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;16位大写7A57A5A743894A0E 
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;Tips：十六位其实就是取32位的8-24位
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;MD5 加密后的密文应该是 纯数字+纯字符&lt;/p&gt;
+&lt;h2 id=&#34;emoji-aes编码&#34;&gt;emoji-aes编码
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;emoji-aes使用对称aes加密密码加密字符串数据，然后用emojis替换Base64输出。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;Message: flag
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;Key: f@1g
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;encryption: 🙃💵🌿🎤🚪🌏🐎🥋🚫😆😍🚫🌊📮🐘🖐🌉🥋✉🕹🎃☂🎤🎈🥋🐘✅🌪🕹🍌👌🎅🚨☃☀🕹🍵📂😆😍😁📂❓🗒
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://aghorler.github.io/emoji-aes/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;emoji-aes&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&#34;词频分析&#34;&gt;词频分析
+&lt;/h2&gt;&lt;p&gt;一堆文字，看着什么编码都不像的，可能是词频分析，用&lt;a class=&#34;link&#34; href=&#34;https://quipqiup.com/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;在线网站&lt;/a&gt;跑&lt;/p&gt;
+&lt;h2 id=&#34;字频分析&#34;&gt;字频分析
+&lt;/h2&gt;&lt;p&gt;通常是给了一大段文字，然后用随波逐流分析就好&lt;/p&gt;
+&lt;h2 id=&#34;摩斯电码&#34;&gt;摩斯电码
+&lt;/h2&gt;&lt;p&gt;变种很多，直接用厨子跑就行&lt;/p&gt;
+&lt;h2 id=&#34;维吉尼亚密码&#34;&gt;维吉尼亚密码
+&lt;/h2&gt;&lt;p&gt;一种典型的多表替换密码&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;给了密文和Key&lt;/p&gt;
+&lt;p&gt;直接拉到cyberchef中解密即可&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;给了密文，没给密钥，但是知道目标明文的格式&lt;/p&gt;
+&lt;p&gt;先用B神的脚本爆破出Key，然后再把这个Key放到cyberchef中解密&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;根据对照表，手搓密钥的前几位&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&#34;希尔密码&#34;&gt;希尔密码
+&lt;/h2&gt;&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;http://www.metools.info/code/hillcipher243.html&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;解密网站&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;已知密文和密钥，并且密钥(key)是一个网址，如&lt;code&gt;http://www.verymuch.net&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;已知密文和密钥，并且密钥是四个数字&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;密文：exky
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;密钥：11 45 1 4
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h2 id=&#34;rabbi密码&#34;&gt;Rabbi密码
+&lt;/h2&gt;&lt;p&gt;已知密文和密钥，密文有点像base64编码的(可能有+号)&lt;/p&gt;
+&lt;h2 id=&#34;云隐密码&#34;&gt;云隐密码
+&lt;/h2&gt;&lt;p&gt;特征是：密文只由01248组成&lt;/p&gt;
+&lt;p&gt;用随波逐流中的脚本直接跑&lt;/p&gt;
+&lt;h2 id=&#34;社会主义核心价值观密码&#34;&gt;社会主义核心价值观密码
+&lt;/h2&gt;&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;http://www.hiencode.com/cvencode.html&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;解密网址&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;公正民主公正文明公正和谐&lt;/code&gt;：&lt;code&gt;abc&lt;/code&gt;&lt;/p&gt;
+&lt;h2 id=&#34;盲文&#34;&gt;盲文
+&lt;/h2&gt;&lt;p&gt;使用&lt;a class=&#34;link&#34; href=&#34;https://www.qqxiuzi.cn/bianma/wenbenjiami.php?s=mangwen&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;在线翻译&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&#34;音乐符号&#34;&gt;音乐符号
+&lt;/h2&gt;&lt;p&gt;Tips：这里要注意，加密的密文一定是以=结尾的，有时候需要自己把=加上&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;eg：♭♯♪‖¶♬♭♭♪♭‖‖♭♭♬‖♫♪‖♩♬‖♬♬♭♭♫‖♩♫‖♬♪♭♭♭‖¶∮‖‖‖‖♩♬‖♬♪‖♩♫♭♭♭♭♭§‖♩♩♭♭♫♭♭♭‖♬♭‖¶§♭♭♯‖♫∮‖♬¶‖¶∮‖♬♫‖♫♬‖♫♫§=
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;直接用&lt;a class=&#34;link&#34; href=&#34;https://www.qqxiuzi.cn/bianma/wenbenjiami.php?s=yinyue&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;在线网站&lt;/a&gt;解密&lt;/p&gt;
+&lt;h2 id=&#34;polybius密码棋盘密码&#34;&gt;Polybius密码（棋盘密码）
+&lt;/h2&gt;&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://ctf-wiki.org/crypto/classical/polyalphabetic/?h=polybius#polybius&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;CTFWiki&lt;/a&gt;上有详细介绍，如果给了一串数字但是用16进制出不来的话，可以试一下。&lt;/p&gt;
+&lt;h2 id=&#34;埃特巴什码atbash&#34;&gt;埃特巴什码(Atbash)
+&lt;/h2&gt;&lt;p&gt;类似于：&lt;code&gt;(+w)v&amp;amp;LdG_FhgKhdFfhgahJfKcgcKdc_eeIJ_gFN&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;拉入厨子直接解密&lt;/p&gt;
+&lt;h2 id=&#34;dna编码&#34;&gt;DNA编码
+&lt;/h2&gt;&lt;p&gt;使用CTFD中的&lt;a class=&#34;link&#34; href=&#34;https://github.com/omemishra/DNA-Genetic-Python-Scripts-CTF&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;DNAcode&lt;/a&gt;脚本解密，随波逐流里面也有。&lt;/p&gt;
+&lt;h2 id=&#34;decabit编码&#34;&gt;Decabit编码
+&lt;/h2&gt;&lt;p&gt;正常的 Decabit编码 是十个字符一组的，如果不是十个一组，就很可能不是 Decabit编码&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;+-+-++–+- ++—+-++- -+–++-++- +–++-++– –+++++— ++-++—+- +++-+-+— +-+-+—++ —+++-++- -+–++-++- -+–+++-+- -+–++-++- -+–++-++- ++-+-+-+– -+–+++-+- ++-++—+- -++++—+- -+–++-++- ++-+-+-+– +-+++—+- +++-++—- —+++-++- +-+-+—++ ++-+-+-+– +-+-+–++- ++–+–++- -++++—+- +—+++-+- ++-+-+-+– -++++—+- -+–+++-+- +–+-+-++- +++-+-+— +-+++—+- -+–+-+++- -+–++-++- —+++-++- ++++—-+- -++++—+- -+–+++-+- -+–++-++- —-+++++-
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://www.dcode.fr/decabit-code&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;在线网站&lt;/a&gt;解。&lt;/p&gt;
+&lt;h2 id=&#34;仿射密码&#34;&gt;仿射密码
+&lt;/h2&gt;&lt;p&gt;有两个key，key-a为必须是(1,3,5,7,9,11,15,17,19,21,23,25)中的一个,key-b是0~25的数字&lt;/p&gt;
+&lt;p&gt;可以使用&lt;a class=&#34;link&#34; href=&#34;http://www.hiencode.com/affine.html&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;在线网站&lt;/a&gt;解。&lt;/p&gt;
+&lt;h2 id=&#34;brainfuck编码&#34;&gt;BrainFuck编码
+&lt;/h2&gt;&lt;p&gt;随波逐流解。感觉和Decabit点像？&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;+++++ +++[- &amp;gt;++++ ++++&amp;lt; ]&amp;gt;++. &amp;lt;++++ +++[- &amp;gt;++++ +++&amp;lt;] &amp;gt;++.&amp;lt; +++[- &amp;gt;---&amp;lt; ]&amp;gt;--- .+++. ----- ---.&amp;lt; +++++ [-&amp;gt;-- ---&amp;lt;] &amp;gt;---- ----. &amp;lt;++++ [-&amp;gt;++ ++&amp;lt;]&amp;gt; +.&amp;lt;++ +[-&amp;gt;- --&amp;lt;]&amp;gt; ----- .&amp;lt;+++ ++++[ -&amp;gt;+++ ++++&amp;lt; ]&amp;gt;+++ +.&amp;lt;++ +++++ [-&amp;gt;-- ----- &amp;lt;]&amp;gt;-- ----. &amp;lt;++++ +[-&amp;gt;+ ++++&amp;lt; ]&amp;gt;+++ +.&amp;lt;++ ++++[ -&amp;gt;--- ---&amp;lt;] &amp;gt;---- --.&amp;lt;+ ++[-&amp;gt; +++&amp;lt;] &amp;gt;+.&amp;lt;+ ++++[ -&amp;gt;+++ ++&amp;lt;]&amp;gt; +++++ .&amp;lt;+++ ++[-&amp;gt; ----- &amp;lt;]&amp;gt;-- -.&amp;lt;++ ++++[ -&amp;gt;+++ +++&amp;lt;] &amp;gt;++++ ++++. +++++ +++.&amp;lt; ++++[ -&amp;gt;--- -&amp;lt;]&amp;gt;- ----. &amp;lt;++++ [-&amp;gt;++ ++&amp;lt;]&amp;gt; .&amp;lt;+++ ++++[ -&amp;gt;--- ----&amp;lt; ]&amp;gt;--- ----- ----- -.++. .&amp;lt;+++ ++++[ -&amp;gt;+++ ++++&amp;lt; ]&amp;gt;+++ +++.+ ++.-. &amp;lt;+++[ -&amp;gt;--- &amp;lt;]&amp;gt;-- ----. &amp;lt;++++ ++[-&amp;gt; ----- -&amp;lt;]&amp;gt;- ----- ----. ++++. &amp;lt;++++ ++[-&amp;gt; +++++ +&amp;lt;]&amp;gt;+ +++++ .&amp;lt;+++ +++[- &amp;gt;---- --&amp;lt;]&amp;gt; ----- ---.&amp;lt; +++[- &amp;gt;+++&amp;lt; ]&amp;gt;+++ ++.&amp;lt;+ ++[-&amp;gt; ---&amp;lt;] &amp;gt;---. &amp;lt;++++ ++[-&amp;gt; +++++ +&amp;lt;]&amp;gt;. &amp;lt;++++ ++[-&amp;gt; +++++ +&amp;lt;]&amp;gt;. &amp;lt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h2 id=&#34;gronsfeld密码&#34;&gt;Gronsfeld密码
+&lt;/h2&gt;&lt;p&gt;没遇到过什么样的，但是在网上看到了，也没给示例，就贴了一个解密脚本。不懂什么意思。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;8
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;# 解密脚本&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;kn&#34;&gt;from&lt;/span&gt; &lt;span class=&#34;nn&#34;&gt;pycipher&lt;/span&gt; &lt;span class=&#34;kn&#34;&gt;import&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Gronsfeld&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;cipher&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;s1&#34;&gt;&amp;#39;TGLBOMSJNSRAJAZDEZXGHSJNZWHG&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;key&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;50&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;61&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;8&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;9&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;20&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;63&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;41&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;secret&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Gronsfeld&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;key&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;decipher&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;cipher&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nb&#34;&gt;print&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;secret&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h2 id=&#34;uuencode编码&#34;&gt;UUencode编码
+&lt;/h2&gt;&lt;h2 id=&#34;aaencode编码&#34;&gt;AAencode编码
+&lt;/h2&gt;&lt;h2 id=&#34;xxencode编码&#34;&gt;XXencode编码
+&lt;/h2&gt;&lt;p&gt;上面三个统统拉到厨子里&lt;/p&gt;
+&lt;h2 id=&#34;snow隐写&#34;&gt;snow隐写
+&lt;/h2&gt;&lt;p&gt;空格和制表符组成的，并不是零宽字符，用snow解。&lt;/p&gt;
+&lt;h2 id=&#34;零宽字符隐写&#34;&gt;零宽字符隐写
+&lt;/h2&gt;&lt;p&gt;应该挺好看出来的，直接在线网站解就好了。&lt;/p&gt;
+&lt;h2 id=&#34;文字盲水印&#34;&gt;文字盲水印
+&lt;/h2&gt;&lt;p&gt;很明显的一个标志就是文本里有&lt;code&gt;DEL&lt;/code&gt;删除符，用PuzzleSolver解。&lt;/p&gt;
+&lt;h2 id=&#34;阴阳怪气&#34;&gt;阴阳怪气
+&lt;/h2&gt;&lt;h2 id=&#34;与佛论禅&#34;&gt;与佛论禅
+&lt;/h2&gt;&lt;h2 id=&#34;与熊论道&#34;&gt;与熊论道
+&lt;/h2&gt;&lt;h2 id=&#34;天书奇谈&#34;&gt;天书奇谈
+&lt;/h2&gt;&lt;h2 id=&#34;无字天书&#34;&gt;无字天书
+&lt;/h2&gt;&lt;h2 id=&#34;中文电报中文电码&#34;&gt;中文电报（中文电码）
+&lt;/h2&gt;&lt;h2 id=&#34;quote-printable编码&#34;&gt;Quote-Printable编码
+&lt;/h2&gt;&lt;p&gt;类似于下面这样的编码，直接拉进厨子解。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;flag{ichunqiu_=E6=8A=80=E6=9C=AF=E6=9C=89=E6=B8=A9=E5=BA=A6}
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;flag{ichunqiu_技术有温度}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h2 id=&#34;中文ascii码&#34;&gt;中文ascii码
+&lt;/h2&gt;&lt;h2 id=&#34;培根密码&#34;&gt;培根密码
+&lt;/h2&gt;&lt;p&gt;由 a、b 或者 A、B 或者 0、1 组成的密文，密文中只有两种字符，可以直接使用 随波逐流 解密&lt;/p&gt;
+&lt;p&gt;Tips：CyberChef 的培根密码解密可能会有点问题，这里建议用随波逐流解密。&lt;/p&gt;
+&lt;h2 id=&#34;锟斤拷&#34;&gt;锟斤拷
+&lt;/h2&gt;&lt;p&gt;Notepad++里直接转成utf-8。&lt;/p&gt;
+&lt;h2 id=&#34;键盘坐标密码&#34;&gt;键盘坐标密码
+&lt;/h2&gt;&lt;p&gt;参考moectf-2024&lt;code&gt;捂住一只耳&lt;/code&gt;。&lt;/p&gt;
+&lt;h2 id=&#34;福尔摩斯密码&#34;&gt;福尔摩斯密码
+&lt;/h2&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;·-· ·-· ·-· ·-· ·-· ·-· ·
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;直接网上查找福尔摩斯密码对照表即可 flag{RRRRRRE}&lt;/p&gt;
+&lt;h2 id=&#34;手机九宫格键盘密码&#34;&gt;手机九宫格键盘密码
+&lt;/h2&gt;</description>
+        </item>
+        <item>
         <title>BuildCTF WP Misc部分</title>
         <link>http://localhost:1313/p/buildctf-wp-misc%E9%83%A8%E5%88%86/</link>
         <pubDate>Thu, 24 Oct 2024 22:35:40 +0800</pubDate>
         <author>2024211570@bupt.cn (XiaoYuan)</author>
         <guid>http://localhost:1313/p/buildctf-wp-misc%E9%83%A8%E5%88%86/</guid>
         <description>&lt;h1 id=&#34;buildctf-wp-misc部分&#34;&gt;BuildCTF WP Misc部分
-&lt;/h1&gt;&lt;h2 id=&#34;what-is-this&#34;&gt;what is this?
+&lt;/h1&gt;&lt;p&gt;&lt;em&gt;第一次和各位师傅把misc AK了，太强了，太有成就感了！感谢各位&lt;/em&gt;&lt;/p&gt;
+&lt;h2 id=&#34;what-is-this&#34;&gt;what is this?
 &lt;/h2&gt;&lt;p&gt;from binary得到&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;ccc,ppppp,ccppcp,p,cccc,cpppp,ccc,ccppcp,cpppp,ccccc,ccppcp,pp,ppppp,cpc,ccccc,c,ccppcp,pcpc,ppppp,pcc,c,ccppcp,pcpcpp,pcpcpp&lt;/p&gt;
@@ -94,8 +342,8 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;n&#34;&gt;shutil&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;unpack_archive&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;sa&#34;&gt;f&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;./layer_&lt;/span&gt;&lt;span class=&#34;si&#34;&gt;{&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;i&lt;/span&gt;&lt;span class=&#34;si&#34;&gt;}&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;.zip&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;sa&#34;&gt;f&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;./&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;zip&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;h1 id=&#34;有黑客&#34;&gt;有黑客！！！
-&lt;/h1&gt;&lt;p&gt;哥斯拉webshell流量，stream 11809中，解密返回payload。&lt;/p&gt;
+&lt;/div&gt;&lt;h2 id=&#34;有黑客&#34;&gt;有黑客！！！
+&lt;/h2&gt;&lt;p&gt;哥斯拉webshell流量，stream 11809中，解密返回payload。&lt;/p&gt;
 &lt;p&gt;&lt;code&gt;Buildctf{WireshArk_1s_vEry_Ez}&lt;/code&gt;&lt;/p&gt;
 &lt;p&gt;stream 11809:   /uploads/shell.php                            哥斯拉&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
