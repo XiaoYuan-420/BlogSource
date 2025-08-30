@@ -36,7 +36,7 @@ featuredImageField = "image"
 rssFullContent = true
 favicon = "/favicon.ico"
   [params.author]
-    email = "2024211570@bupt.cn"
+    email = "cwxiaoyuan@gmail.com"
     name = "XiaoYuan"
 
   [params.footer]
