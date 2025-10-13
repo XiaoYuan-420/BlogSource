@@ -2,43 +2,290 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
     <channel>
         <title>Posts on 萧垣的博客</title>
-        <link>http://localhost:11355/post/</link>
+        <link>http://localhost:1313/post/</link>
         <description>Recent content in Posts on 萧垣的博客</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
-        <managingEditor>2024211570@bupt.cn (XiaoYuan)</managingEditor>
-        <webMaster>2024211570@bupt.cn (XiaoYuan)</webMaster>
+        <managingEditor>cwxiaoyuan@gmail.com (XiaoYuan)</managingEditor>
+        <webMaster>cwxiaoyuan@gmail.com (XiaoYuan)</webMaster>
         <copyright>XiaoYuan</copyright>
-        <lastBuildDate>Tue, 12 Aug 2025 15:12:37 +0800</lastBuildDate><atom:link href="http://localhost:11355/post/index.xml" rel="self" type="application/rss+xml" /><item>
-        <title>QAA</title>
-        <link>http://localhost:11355/p/qaa/</link>
+        <lastBuildDate>Mon, 13 Oct 2025 18:10:21 +0800</lastBuildDate><atom:link href="http://localhost:1313/post/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>TSCTF-J 2025 Misc部分 WP</title>
+        <link>http://localhost:1313/p/tsctf-j-2025-misc%E9%83%A8%E5%88%86-wp/</link>
+        <pubDate>Mon, 13 Oct 2025 18:10:21 +0800</pubDate>
+        <author>cwxiaoyuan@gmail.com (XiaoYuan)</author>
+        <guid>http://localhost:1313/p/tsctf-j-2025-misc%E9%83%A8%E5%88%86-wp/</guid>
+        <description>&lt;h2 id=&#34;卢森堡的秘密&#34;&gt;卢森堡的秘密
+&lt;/h2&gt;&lt;p&gt;考点：LSB隐写&lt;/p&gt;
+&lt;p&gt;预期难度：1/10&lt;/p&gt;
+&lt;p&gt;赛后难度：1/10&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;使用&lt;code&gt;zsteg&lt;/code&gt;直接出&lt;/li&gt;
+&lt;li&gt;或者是使用&lt;code&gt;StegSolve&lt;/code&gt;将&lt;code&gt;R0,B0,G0&lt;/code&gt;通道勾选上就能看到FLAG&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;code&gt;TSCTF-J{Th3_sEcre7_0f_L$B!}&lt;/code&gt;&lt;/p&gt;
+&lt;h2 id=&#34;meow&#34;&gt;Meow
+&lt;/h2&gt;&lt;p&gt;考点：docx文件结构+变表base64+开源项目的理解&lt;/p&gt;
+&lt;p&gt;预期难度：2/10&lt;/p&gt;
+&lt;p&gt;赛后难度：4/10&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;这题真的不是在考眼力。。。或许错的真是我吧，我不该把fake flag设得这么真。。。&lt;/strong&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;知识点补充&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;DOCX文档&lt;/strong&gt;是Microsoft Word使用的一种文件扩展名，其基于Office Open XML标准的&lt;strong&gt;压缩文件&lt;/strong&gt;格式&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;你可以理解为，所有docx文档都能作为压缩包打开。你可以将docx的后缀名直接改成zip后，就可以打开看到它的文件结构。这就是第一个提示：&lt;code&gt;猫猫在docx内部好像放了些什么&lt;/code&gt;的含义&lt;/p&gt;
+&lt;p&gt;作为压缩包打开后，在&lt;code&gt;[Content_Types].xml&lt;/code&gt;中我们能找到被更换的base64表：&lt;code&gt;a-zA-Z0-9+/=&lt;/code&gt;。(这里有个typo，但是不影响做题)&lt;/p&gt;
+&lt;p&gt;后面的所有提示，都在指向一个开源项目：https://github.com/Glavo/MeowLang，其作者的&lt;a class=&#34;link&#34; href=&#34;https://www.bilibili.com/video/BV14s7qzkEzW/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;视频&lt;/a&gt;在BiliBili平台上有6.4w的播放量，我并不觉得找到这个项目是一个很困难的事情。而且也不需要任何的逆向，我们只需要理解几个关键点就好了；或者直接把GitHub上的代码clone下来运行一下。&lt;/p&gt;
+&lt;p&gt;可以得到如下输出：&lt;code&gt;vfndveyTsNSk&lt;/code&gt; &lt;code&gt;mv9bBq==&lt;/code&gt; &lt;code&gt;xZrFq2fu&lt;/code&gt; &lt;code&gt;x01LB3Dnztb3&lt;/code&gt; &lt;code&gt;iseHFq==&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;在&lt;a class=&#34;link&#34; href=&#34;https://cyberchef.org/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;CyberChef&lt;/a&gt;里解一下变表base64就可以得到flag&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;TSCTF-J{1_Am_4_CaT_MeowMe0w!!!}&lt;/code&gt;&lt;/p&gt;
+&lt;h2 id=&#34;badfile&#34;&gt;BadFile
+&lt;/h2&gt;&lt;p&gt;考点：恶意文件审计&lt;/p&gt;
+&lt;p&gt;预期难度：5/10&lt;/p&gt;
+&lt;p&gt;赛后难度：3/10&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;本题改编自DCIC2025。&lt;/p&gt;
+&lt;p&gt;原题中txt给了4000份，pdf给了300份，wav(原题应为几乎无声的mp3)给了200份，png给了300分，且并没有提供恶意文件的数量。&lt;/p&gt;
+&lt;p&gt;我真的已经把题改得很友好了。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&#34;非预期&#34;&gt;非预期
+&lt;/h3&gt;&lt;p&gt;一份一份看，一份一份听。&lt;/p&gt;
+&lt;h3 id=&#34;预期解&#34;&gt;预期解
+&lt;/h3&gt;&lt;p&gt;可以预知的是，txt与wav中很难存在恶意代码，所以为隐私泄露的问题。手动开出第一份txt后发现差不多是&lt;code&gt;手机号，身份证，住址&lt;/code&gt;这类的信息。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;11
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;12
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;13
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;14
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;15
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;16
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;17
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;18
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;19
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;20
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;21
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;22
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;23
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;24
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;25
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;26
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;27
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;28
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;29
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;kn&#34;&gt;import&lt;/span&gt; &lt;span class=&#34;nn&#34;&gt;os&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;kn&#34;&gt;import&lt;/span&gt; &lt;span class=&#34;nn&#34;&gt;re&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;k&#34;&gt;def&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;find_txt_with_digits&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;folder_path&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;):&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;n&#34;&gt;matched_files&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;[]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;k&#34;&gt;for&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;filename&lt;/span&gt; &lt;span class=&#34;ow&#34;&gt;in&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;os&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;listdir&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;folder_path&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;):&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;k&#34;&gt;if&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;filename&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;endswith&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;.txt&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;):&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;            &lt;span class=&#34;n&#34;&gt;file_path&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;os&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;path&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;join&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;folder_path&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;filename&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;            
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;            &lt;span class=&#34;k&#34;&gt;try&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;                &lt;span class=&#34;k&#34;&gt;with&lt;/span&gt; &lt;span class=&#34;nb&#34;&gt;open&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;file_path&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;s1&#34;&gt;&amp;#39;r&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;encoding&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;utf-8&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;as&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;file&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;                    &lt;span class=&#34;k&#34;&gt;for&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;line&lt;/span&gt; &lt;span class=&#34;ow&#34;&gt;in&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;file&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;                        &lt;span class=&#34;k&#34;&gt;if&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;re&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;search&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;sa&#34;&gt;r&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;\d&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;line&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;):&lt;/span&gt;  &lt;span class=&#34;c1&#34;&gt;# 使用正则表达式查找数字&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;                            &lt;span class=&#34;n&#34;&gt;matched_files&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;append&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;file_path&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;                            &lt;span class=&#34;k&#34;&gt;break&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;            &lt;span class=&#34;k&#34;&gt;except&lt;/span&gt; &lt;span class=&#34;ne&#34;&gt;Exception&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;as&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;e&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;                &lt;span class=&#34;nb&#34;&gt;print&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;sa&#34;&gt;f&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;处理文件 &lt;/span&gt;&lt;span class=&#34;si&#34;&gt;{&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;filename&lt;/span&gt;&lt;span class=&#34;si&#34;&gt;}&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt; 时出错: &lt;/span&gt;&lt;span class=&#34;si&#34;&gt;{&lt;/span&gt;&lt;span class=&#34;nb&#34;&gt;str&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;e&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;si&#34;&gt;}&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;k&#34;&gt;return&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;matched_files&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;k&#34;&gt;if&lt;/span&gt; &lt;span class=&#34;vm&#34;&gt;__name__&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;==&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;__main__&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;n&#34;&gt;target_folder&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;./txt&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;n&#34;&gt;result_files&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;find_txt_with_digits&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;target_folder&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;k&#34;&gt;if&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;result_files&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;nb&#34;&gt;print&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;包含数字的txt文件:&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;k&#34;&gt;for&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;file_path&lt;/span&gt; &lt;span class=&#34;ow&#34;&gt;in&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;result_files&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;            &lt;span class=&#34;nb&#34;&gt;print&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;sa&#34;&gt;f&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span class=&#34;si&#34;&gt;{&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;os&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;path&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;basename&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;file_path&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;si&#34;&gt;}&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;k&#34;&gt;else&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;nb&#34;&gt;print&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;未找到包含数字的txt文件&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;wav转文字同样用上述方法&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;8
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;kn&#34;&gt;import&lt;/span&gt; &lt;span class=&#34;nn&#34;&gt;os&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;kn&#34;&gt;import&lt;/span&gt; &lt;span class=&#34;nn&#34;&gt;whisper&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;model&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;whisper&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;load_model&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;base&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;filelist&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;os&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;listdir&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;wav&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;k&#34;&gt;for&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;filename&lt;/span&gt; &lt;span class=&#34;ow&#34;&gt;in&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;filelist&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;filepath&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;s1&#34;&gt;&amp;#39;./wav/&amp;#39;&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;+&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;filename&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;result&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;model&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;transcribe&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;filepath&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;language&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;zh&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nb&#34;&gt;print&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;filepath&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;result&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;text&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;])&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;pdf中的恶意代码通常存在在js代码之中。我们可以用如下命令转成txt查找JavaScript字段&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;mkdir -p txt &lt;span class=&#34;o&#34;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;for&lt;/span&gt; f in *.pdf&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;do&lt;/span&gt; strings &lt;span class=&#34;s2&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span class=&#34;nv&#34;&gt;$f&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;&lt;/span&gt; &amp;gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;txt/&lt;/span&gt;&lt;span class=&#34;si&#34;&gt;${&lt;/span&gt;&lt;span class=&#34;nv&#34;&gt;f&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;%.pdf&lt;/span&gt;&lt;span class=&#34;si&#34;&gt;}&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;.txt&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;done&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;最终结果&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-plaintext&#34; data-lang=&#34;plaintext&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;3WQlwSaj.txt_dubZ3AZn.txt_nhlbNxGL.txt_qtFyaGkZ.txt_wlBUCOeg.txt_2JuiKL42.wav_4UjLqeRF.wav_Ew24ldS2.wav_HjRtD6f3.wav_RtUwEgj1.wav_8YmxZRca.pdf_Z8P4DHre.pdf_mFU1SdVp.pdf_w9V1ZDEd.pdf_xdBqKtxe.pdf
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;flag：&lt;code&gt;TSCTF-J{0b4a2a6431f6b94b3c1d3d50d0a45aea}&lt;/code&gt;&lt;/p&gt;
+&lt;h2 id=&#34;ezfix&#34;&gt;EzFix
+&lt;/h2&gt;&lt;p&gt;考点：Win11下OSData导致的蓝屏修复+已知明文攻击&lt;/p&gt;
+&lt;p&gt;预期难度：5/10&lt;/p&gt;
+&lt;p&gt;赛后难度：8/10&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;知识点补充&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://www.cnblogs.com/start1/p/19065842&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;压缩包已知明文攻击&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&#34;非预期-1&#34;&gt;非预期
+&lt;/h3&gt;&lt;p&gt;直接用 DiskGenius 挂载，然后查找两段flag&lt;/p&gt;
+&lt;h3 id=&#34;预期解-1&#34;&gt;预期解
+&lt;/h3&gt;&lt;p&gt;蓝屏原因见&lt;a class=&#34;link&#34; href=&#34;https://www.bilibili.com/video/BV13Tbxz1EvV/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;视频&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;第一段flag跟着视频就能找出来，记得别直接删了就行。&lt;/p&gt;
+&lt;p&gt;第二段flag用到了已知明文攻击，打开压缩包看到 ZipCrypto 很明显提示了明文攻击，而且桌面上的&lt;code&gt;useless.png&lt;/code&gt;和压缩包中的&lt;code&gt;useless.png&lt;/code&gt;完全一致。这点可以通过将图片压缩成一个zip文件对比CRC值发现。&lt;/p&gt;
+&lt;p&gt;我们可以使用&lt;code&gt;bkcrack&lt;/code&gt;协助我们。&lt;/p&gt;
+&lt;h4 id=&#34;方法一&#34;&gt;方法一
+&lt;/h4&gt;&lt;p&gt;将桌面上的&lt;code&gt;useless.png&lt;/code&gt;压缩成压缩包&lt;code&gt;useless.zip&lt;/code&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;bkcrack -C flag_part2.zip -c useless.png -P useless.zip -p useless.png
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;bkcrack -C flag_part2.zip -k &lt;span class=&#34;s2&#34;&gt;&amp;#34;刚刚得到的三段密钥&amp;#34;&lt;/span&gt; -U out.zip &lt;span class=&#34;m&#34;&gt;123&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;随后用123解压out.zip即可&lt;/p&gt;
+&lt;h4 id=&#34;方法二&#34;&gt;方法二
+&lt;/h4&gt;&lt;p&gt;如果题目中没有给我们桌面上的&lt;code&gt;useless.png&lt;/code&gt;我们也能借助png文件头的明文来解&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nb&#34;&gt;echo&lt;/span&gt; 89504E470D0A1A0A0000000D49484452 &lt;span class=&#34;p&#34;&gt;|&lt;/span&gt; xxd -r -ps &amp;gt; png_header
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;bkcrack -C flag_part2.zip -c useless.png -p png_header -o &lt;span class=&#34;m&#34;&gt;0&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;bkcrack -C flag_part2.zip -c useless.png -k e9ac551e 24d21c15 097eb913 -U out.zip &lt;span class=&#34;m&#34;&gt;123&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;&lt;code&gt;TSCTF-J{w0w_Y0u_4rE_9ood_4t_B50D!!!Wdf9u}&lt;/code&gt;&lt;/p&gt;
+&lt;h2 id=&#34;listloadmaster&#34;&gt;ListLoadMaster
+&lt;/h2&gt;&lt;p&gt;考点：Python中不同List创建方式的区别&lt;/p&gt;
+&lt;p&gt;预期难度：7/10&lt;/p&gt;
+&lt;p&gt;赛后难度：7/10&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;知识点补充&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://www.bilibili.com/video/BV19S4y1F7xq&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;【Python】三个看似一样的列表，占用内存空间竟然不一样多？&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;题目要求如下：在通过题目安全检测的前提下，分别生成三个元素个数相同，但是所占内存空间大小不同的一维和二维列表&lt;/p&gt;
+&lt;p&gt;一个可能的解：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;8
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&amp;gt;&amp;gt; &lt;span class=&#34;nv&#34;&gt;lst&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;[&lt;/span&gt;0&lt;span class=&#34;o&#34;&gt;]&lt;/span&gt; * &lt;span class=&#34;m&#34;&gt;5&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&amp;gt;&amp;gt; &lt;span class=&#34;nv&#34;&gt;lst&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;[&lt;/span&gt;0,0,0,0,0&lt;span class=&#34;o&#34;&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&amp;gt;&amp;gt; &lt;span class=&#34;nv&#34;&gt;lst&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;m&#34;&gt;0&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;for&lt;/span&gt; _ in range&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;5&lt;span class=&#34;o&#34;&gt;)]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;Challenge &lt;span class=&#34;m&#34;&gt;1&lt;/span&gt; passed!
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&amp;gt;&amp;gt; &lt;span class=&#34;nv&#34;&gt;lst&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;[[&lt;/span&gt;0&lt;span class=&#34;o&#34;&gt;]&lt;/span&gt; * 5&lt;span class=&#34;o&#34;&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&amp;gt;&amp;gt; &lt;span class=&#34;nv&#34;&gt;lst&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;[[&lt;/span&gt;0&lt;span class=&#34;o&#34;&gt;]&lt;/span&gt;,&lt;span class=&#34;o&#34;&gt;[&lt;/span&gt;0&lt;span class=&#34;o&#34;&gt;]&lt;/span&gt;,&lt;span class=&#34;o&#34;&gt;[&lt;/span&gt;0&lt;span class=&#34;o&#34;&gt;]&lt;/span&gt;,&lt;span class=&#34;o&#34;&gt;[&lt;/span&gt;0&lt;span class=&#34;o&#34;&gt;]&lt;/span&gt;,&lt;span class=&#34;o&#34;&gt;[&lt;/span&gt;0&lt;span class=&#34;o&#34;&gt;]]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&amp;gt;&amp;gt; &lt;span class=&#34;nv&#34;&gt;lst&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;[[&lt;/span&gt;0&lt;span class=&#34;o&#34;&gt;]&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;for&lt;/span&gt; _ in range&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;5&lt;span class=&#34;o&#34;&gt;)]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;Challenge &lt;span class=&#34;m&#34;&gt;2&lt;/span&gt; passed!
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h2 id=&#34;pyjail&#34;&gt;PyJail
+&lt;/h2&gt;&lt;p&gt;考点：栈帧逃逸&lt;/p&gt;
+&lt;p&gt;预期难度：4/10&lt;/p&gt;
+&lt;p&gt;赛后难度：8/10&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;题目改编自 2025 Mini-L CTF&lt;/p&gt;
+&lt;p&gt;没改好，滑跪了。&lt;/p&gt;
+&lt;/blockquote&gt;
+</description>
+        </item>
+        <item>
+        <title>新生常见问题解答</title>
+        <link>http://localhost:1313/p/%E6%96%B0%E7%94%9F%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98%E8%A7%A3%E7%AD%94/</link>
         <pubDate>Tue, 12 Aug 2025 15:12:37 +0800</pubDate>
-        <author>2024211570@bupt.cn (XiaoYuan)</author>
-        <guid>http://localhost:11355/p/qaa/</guid>
+        <author>cwxiaoyuan@gmail.com (XiaoYuan)</author>
+        <guid>http://localhost:1313/p/%E6%96%B0%E7%94%9F%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98%E8%A7%A3%E7%AD%94/</guid>
         <description>&lt;h1 id=&#34;qa&#34;&gt;Q&amp;amp;A
 &lt;/h1&gt;&lt;p&gt;Organized by @XiaoYuan&lt;/p&gt;
+&lt;p&gt;V25.09.01&lt;/p&gt;
 &lt;blockquote&gt;
-&lt;p&gt;[!Note]&lt;/p&gt;
 &lt;p&gt;此份Q&amp;amp;A文件根据目前群里问得较多的问题与学长的回答整理而成，有任何疏漏、错误或争议的点欢迎指正。&lt;/p&gt;
+&lt;p&gt;使用说明：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;点击目录可以跳转到相应问题，pdf文件存在对应的书签，亦可点击跳转。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;点击脚注（即右上角的数字）可以查看补充解释，点击解释后的小箭头可返回原处。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
 &lt;/blockquote&gt;
 &lt;blockquote&gt;
-&lt;p&gt;[!IMPORTANT]&lt;/p&gt;
-&lt;p&gt;群里的学长学姐们都很热情，基本上能做到有问必答。但，很多问题也能在FAQ文档和群文件中都能找到答案（都是花了大精力整理出来的，&lt;del&gt;你们不看的话我们会很伤心的呜呜呜&lt;/del&gt;），且同一个或相似的问题学长学姐解答多了也会疲倦。所以，学长学姐在此希望大家能够培养信息搜集与整理的能力，有些找不到答案的问题再在群里提出，我们很乐意解答。&lt;/p&gt;
+&lt;p&gt;群里的学长学姐们都很热情，基本上能做到有问必答。但，很多问题也能在&lt;a class=&#34;link&#34; href=&#34;https://docs.qq.com/doc/DWWFySVZxZFhnVEV1&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;FAQ文档&lt;/a&gt;和群文件中都能找到答案（都是花了大精力整理出来的，&lt;del&gt;你们不看的话我们会很伤心的呜呜呜&lt;/del&gt;），且同一个或相似的问题学长学姐解答多了也会疲倦。所以，学长学姐在此希望大家能够培养信息搜集与整理的能力，有些找不到答案的问题再在群里提出，我们很乐意解答。&lt;/p&gt;
 &lt;/blockquote&gt;
-&lt;p&gt;[toc]&lt;/p&gt;
+&lt;hr&gt;
 &lt;h2 id=&#34;关于社团战队与招新赛&#34;&gt;关于社团，战队与招新赛
 &lt;/h2&gt;&lt;p&gt;​      天枢信息安全协会是北邮登记在册的一个社团，社团下有天璇Merak/天枢Dubhe两个战队~~(你问我有什么区别，实际上没有什么区别)~~，战队会定期参加全国各大的CTF安全竞赛。在北邮，一般情况下，加入了QQ群即加入了社团，&lt;strong&gt;不加社团也可以参加活动，参加社团也可以不参加活动&lt;/strong&gt;。加入我们的战队需要通过招新赛选拔。&lt;/p&gt;
 &lt;p&gt;​      TSCTF-J，即天璇战队招新赛。参加招新赛是加入天璇战队的&lt;strong&gt;其中一种&lt;/strong&gt;方式。在招新赛前，我们会组织一次宣讲方便大家更好的了解天璇/天枢。我们&lt;strong&gt;并不&lt;/strong&gt;以招新赛的成绩为招新的&lt;strong&gt;唯一标准&lt;/strong&gt;。通过招新赛，我们希望看到大家的&lt;strong&gt;学习热情&lt;/strong&gt;，赛后根据个人意愿参考排名进行招新。**招新人数灵活调整。**大家也不必担心招新赛会很难，难的话为什么还叫招新赛呢？你的排名很大程度上只会影响到你能拿多少奖金。&lt;/p&gt;
-&lt;p&gt;​      宣讲时间预计安排在开学后两周，招新赛时间预计在九月底百团大战前后，会给大家留出充足的学习时间。&lt;/p&gt;
+&lt;p&gt;​      宣讲时间安排在9.21，&lt;a class=&#34;link&#34; href=&#34;git:history-commit-hash:370972dac313a8c44f251f09034307439fc17f33&#34; &gt;招新赛&lt;/a&gt;时间在10.10-10.13，会给大家留出充足的学习时间。&lt;/p&gt;
 &lt;blockquote&gt;
-&lt;p&gt;[!Note]&lt;/p&gt;
 &lt;p&gt;Atomic:希望大家以爱好为导向，不要太有压力。&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;h2 id=&#34;焦虑篇&#34;&gt;焦虑篇
 &lt;/h2&gt;&lt;h3 id=&#34;我什么都不会我是0基础该怎么做&#34;&gt;我什么都不会/我是0基础，该怎么做？
-&lt;/h3&gt;&lt;p&gt;​      仔细读一读群公告中的&lt;strong&gt;FAQ文档&lt;/strong&gt;与群文件中的&lt;strong&gt;各种入门指南&lt;/strong&gt;，然后跟着&lt;strong&gt;做起来&lt;/strong&gt;。想会有很多问题，做会有很多办法。&lt;/p&gt;
+&lt;/h3&gt;&lt;p&gt;​      仔细读一读群公告中的&lt;a class=&#34;link&#34; href=&#34;https://docs.qq.com/doc/DWWFySVZxZFhnVEV1&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;&lt;strong&gt;FAQ文档&lt;/strong&gt;&lt;/a&gt;与群文件中的&lt;strong&gt;各种入门指南&lt;/strong&gt;，然后跟着&lt;strong&gt;做起来&lt;/strong&gt;。想会有很多问题，做会有很多办法。&lt;/p&gt;
 &lt;blockquote&gt;
-&lt;p&gt;[!Note]&lt;/p&gt;
 &lt;p&gt;纯真：而且也不用太焦虑学哪个方向，比起犹豫半天不如学了再说，学会了肯定不比不会更糟&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;。&lt;/p&gt;
 &lt;p&gt;pythok:最重要的是在暑假确保自己有登录github的能力。&lt;sup id=&#34;fnref:2&#34;&gt;&lt;a href=&#34;#fn:2&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;2&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
 &lt;/blockquote&gt;
@@ -46,17 +293,9 @@
 &lt;/h3&gt;&lt;p&gt;​      要知道，每个人与每个人之间一定是存在差异的，厉害与厉害之间亦存在区别。所以做好自己只要关注好自己的进步就可以。&lt;strong&gt;不必急于求成&lt;/strong&gt;，留给大家的时间还很充裕。&lt;del&gt;群里一些顶着25头衔的也可能是你的学长。&lt;/del&gt;&lt;/p&gt;
 &lt;p&gt;​      现在队里的也有很多同学在之前一点也没接触过安全，CTF，编程等的相关内容。就像前面说的&lt;code&gt;希望大家以爱好为导向，不要太有压力。&lt;/code&gt;&lt;/p&gt;
 &lt;blockquote&gt;
-&lt;p&gt;[!Note]&lt;/p&gt;
 &lt;p&gt;纯真：会和会之间也有差别的，这个不用焦虑。&lt;/p&gt;
 &lt;p&gt;pythok：先行动先尝试。&lt;/p&gt;
 &lt;/blockquote&gt;
-&lt;h3 id=&#34;我应该买什么电脑不做推荐&#34;&gt;我应该买什么电脑？（不做推荐）
-&lt;/h3&gt;&lt;p&gt;​      这是很泛泛而谈的问题，你问不同的人可能会有完全相反的答案。&lt;/p&gt;
-&lt;p&gt;​      &lt;strong&gt;你可以试试这样提问（需求+预算）：&lt;/strong&gt;&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;我的预算是xx，平时有玩游戏的需求，会玩/打算玩xx游戏，我应该买什么样的电脑（买xx电脑够用吗）？&lt;/li&gt;
-&lt;li&gt;我的预算是xx，平时只有专业/做题的需求，只玩一些xx游戏，我应该买什么样的电脑（买xx电脑够用吗）？&lt;/li&gt;
-&lt;/ul&gt;
 &lt;h2 id=&#34;先导篇&#34;&gt;先导篇
 &lt;/h2&gt;&lt;h3 id=&#34;关于vs与vscodepython与pycharm等&#34;&gt;关于VS与VSCode，Python与PyCharm等
 &lt;/h3&gt;&lt;p&gt;​      Microsoft Visual Studio（简称VS）是美国微软公司的&lt;strong&gt;开发工具包&lt;/strong&gt;系列产品。它包含了一系列的环境&lt;sup id=&#34;fnref:3&#34;&gt;&lt;a href=&#34;#fn:3&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;3&lt;/a&gt;&lt;/sup&gt;，不仅仅只是代码编辑器&lt;sup id=&#34;fnref:4&#34;&gt;&lt;a href=&#34;#fn:4&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;4&lt;/a&gt;&lt;/sup&gt;。而VScode是一种代码编辑器，它本身不包含运行代码所需的环境。Python与PyCharm同理。&lt;/p&gt;
@@ -71,11 +310,17 @@
 &lt;li&gt;服务器、编程、黑客工具很多都通过命令行操作。&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h2 id=&#34;入门篇&#34;&gt;入门篇
-&lt;/h2&gt;&lt;h3 id=&#34;什么是ctf我该如何入门&#34;&gt;什么是CTF，我该如何入门？
+&lt;/h2&gt;&lt;h3 id=&#34;重要提醒&#34;&gt;重要提醒
+&lt;/h3&gt;&lt;blockquote&gt;
+&lt;p&gt;[!IMPORTANT]&lt;/p&gt;
+&lt;p&gt;在参与任何比赛前，你应该仔细阅读比赛的使用手册以及&lt;strong&gt;比赛规则&lt;/strong&gt;。值得强调的是，对于&lt;strong&gt;任何&lt;/strong&gt;比赛，在&lt;strong&gt;比赛结束前以及WP收集结束前&lt;/strong&gt;，在&lt;strong&gt;任何&lt;/strong&gt;地方以&lt;strong&gt;任何&lt;/strong&gt;形式与其他人[^5]&lt;strong&gt;公开交流或发表&lt;/strong&gt;任何题目相关信息&lt;sup id=&#34;fnref:5&#34;&gt;&lt;a href=&#34;#fn:5&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;5&lt;/a&gt;&lt;/sup&gt;是被&lt;strong&gt;严格禁止&lt;/strong&gt;的。可能受到的惩罚包括但不限于&lt;strong&gt;取消比赛资格&lt;/strong&gt;等。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;[^5]：除队友、主办方、裁判组、出题人外的任何人。&lt;/p&gt;
+&lt;h3 id=&#34;什么是ctf我该如何入门&#34;&gt;什么是CTF，我该如何入门？
 &lt;/h3&gt;&lt;p&gt;​      看看FAQ文档与群文件喵，看看FAQ文档与群文件谢谢喵。&lt;/p&gt;
 &lt;p&gt;​      在此，我补充一点点可能没写清楚的地方：&lt;/p&gt;
 &lt;ol&gt;
-&lt;li&gt;CTF比赛形式有很多种，常见的有&lt;strong&gt;解题赛与攻防赛(AWD与AWDP)&lt;sup id=&#34;fnref:5&#34;&gt;&lt;a href=&#34;#fn:5&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;5&lt;/a&gt;&lt;/sup&gt;&lt;/strong&gt;，解题赛下通常设有五大方向，即&lt;code&gt;PWN,WEB,RE,CRYPTO,MISC&lt;/code&gt;，最近各大赛事也掀起了一股AI热，解题赛下队伍中的每个人分别负责一个或多个方向的赛题，赛题分类放置，每个比赛各方向题目的占比不定。&lt;/li&gt;
+&lt;li&gt;CTF比赛形式有很多种，常见的有&lt;strong&gt;解题赛与攻防赛(AWD与AWDP)&lt;sup id=&#34;fnref:6&#34;&gt;&lt;a href=&#34;#fn:6&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;6&lt;/a&gt;&lt;/sup&gt;&lt;/strong&gt;，解题赛下通常设有五大方向，即&lt;code&gt;PWN,WEB,RE,CRYPTO,MISC&lt;/code&gt;，最近各大赛事也掀起了一股AI热，解题赛下队伍中的每个人分别负责一个或多个方向的赛题，赛题分类放置，每个比赛各方向题目的占比不定。&lt;/li&gt;
 &lt;/ol&gt;
 &lt;h3 id=&#34;入门指南里的东西好多啊我要全部学完才能开始做题吗&#34;&gt;入门指南里的东西好多啊，我要全部学完才能开始做题吗？
 &lt;/h3&gt;&lt;p&gt;​      这个问题的答案永远都是&lt;strong&gt;不需要&lt;/strong&gt;。要知道，知识是学不完的，&lt;strong&gt;边做边学&lt;/strong&gt;会是一个不错的策略。通常情况下，在写题的过程中遇到不会的知识点，去学，学完回来接着做。&lt;/p&gt;
@@ -83,19 +328,18 @@
 &lt;/h3&gt;&lt;p&gt;​      这也是一个很宽泛的问题，对入门指南中有任何疑惑的点可以在群里面&lt;strong&gt;具体的指出&lt;/strong&gt;，我们会进行解答的~&lt;/p&gt;
 &lt;h3 id=&#34;如果基本没什么基础在的话需要从什么方向学习比较好呢&#34;&gt;如果基本没什么基础在的话，需要从什么方向学习比较好呢？
 &lt;/h3&gt;&lt;blockquote&gt;
-&lt;p&gt;[!Note]&lt;/p&gt;
 &lt;p&gt;纯真：学语言吧，之后不管打不打竞赛，只要是计算机相关工作都需要编程语言基础。&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;h3 id=&#34;我要先学什么语言python吗&#34;&gt;我要先学什么语言，Python吗？
 &lt;/h3&gt;&lt;p&gt;​      每个方向对编程语言的要求是不同的，所以学习路线并不是固定的。通常来说我们会使用Python进行解题脚本的编写。&lt;/p&gt;
 &lt;blockquote&gt;
-&lt;p&gt;[!Note]&lt;/p&gt;
 &lt;p&gt;纯真：学习路线不是固定的，看你想做什么，问问ai，ai能解释得很详细。&lt;/p&gt;
 &lt;p&gt;Cabelis：不同方向有不同的要求 web要求会的比较多 pwn一般是c和python re一开始会c就可以了 密码学和AI要求python。&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;h3 id=&#34;关于题目附件与在线环境&#34;&gt;关于题目附件与在线环境
 &lt;/h3&gt;&lt;p&gt;​      在没有在线环境的情况下，题目附件是出题人给你的挑战，你需要通过恰当的手段从附件中拿到FLAG。&lt;/p&gt;
-&lt;p&gt;​      在存在在线环境的情况下，题目附件是在线环境的模拟或相关的条件，通常不包含FLAG，你可以在本地测试通过后开启在线环境，通过远程交互&lt;sup id=&#34;fnref:6&#34;&gt;&lt;a href=&#34;#fn:6&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;6&lt;/a&gt;&lt;/sup&gt;的方式拿到FLAG。&lt;/p&gt;
+&lt;p&gt;​      在存在在线环境的情况下，题目附件是在线环境的模拟或相关的条件，通常不包含FLAG，你可以在本地测试通过后开启在线环境，通过与环境交互的方式拿到FLAG。&lt;strong&gt;每个平台环境开启的方式会有所不同，请参照平台指引进行开启。&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;​      通常情况下，Web题与Pwn题需要你主动开启一个在线环境。大部分情况下，你的环境与其他人并不共用。&lt;/p&gt;
 &lt;h2 id=&#34;后记&#34;&gt;后记
 &lt;/h2&gt;&lt;p&gt;​      学长学姐们能够理解大家的斗志昂扬与惴惴不安，因为我们大都也是从这个阶段走过来的。为了能够更好的帮助到大家，我们编写了很多的资料，所以在此希望大家能利用好这些资料，现在给到大家的东西足够支撑过一个阶段。&lt;/p&gt;
 &lt;p&gt;​      作者的文笔不是很好，所以有任何问题欢迎随时指出。&lt;/p&gt;
@@ -104,7 +348,7 @@
 &lt;hr&gt;
 &lt;ol&gt;
 &lt;li id=&#34;fn:1&#34;&gt;
-&lt;p&gt;去年打MoeCTF的时候，作者基本上每个方向都尝试了一遍~~（除了Pwn）~~。&amp;#160;&lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;去年打MoeCTF的时候，作者基本上每个方向都尝试了一遍~~ （除了Pwn） ~~。&amp;#160;&lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;li id=&#34;fn:2&#34;&gt;
 &lt;p&gt;北邮并不会干涉这一方面，但请不要发表不当言论。&amp;#160;&lt;a href=&#34;#fnref:2&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
@@ -116,10 +360,10 @@
 &lt;p&gt;&lt;strong&gt;编程语言&lt;/strong&gt; = 规则 + 词汇（计算机能理解的表达方式），例如&lt;code&gt;Python,C,C++,Java&lt;/code&gt;等；&lt;strong&gt;代码编辑器&lt;/strong&gt; = 输入这些内容的地方，可能还会帮你自动补全、检查错别字（语法错误）、加颜色区分不同部分等，例如&lt;code&gt;VSCode,PyCharm,IDEA&lt;/code&gt;等，甚至记事本也可以是你的代码编辑器。&amp;#160;&lt;a href=&#34;#fnref:4&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;li id=&#34;fn:5&#34;&gt;
-&lt;p&gt;线上赛一般为解题赛的模式，线下赛一般为攻防赛的模式。&amp;#160;&lt;a href=&#34;#fnref:5&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;包括但不限于队伍 token、题目附件、题目链接、解题提示、解题思路、题目答案等。&amp;#160;&lt;a href=&#34;#fnref:5&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;li id=&#34;fn:6&#34;&gt;
-&lt;p&gt;通常情况下，你需要在命令行中使用NC（NetCat），或在Python中编写pwntools脚本进行远程交互。&amp;#160;&lt;a href=&#34;#fnref:6&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;线上赛一般为解题赛的模式，线下赛一般为攻防赛的模式。&amp;#160;&lt;a href=&#34;#fnref:6&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ol&gt;
 &lt;/div&gt;
@@ -127,10 +371,10 @@
         </item>
         <item>
         <title>2025数字安全产业积分争夺赛WP</title>
-        <link>http://localhost:11355/p/2025%E6%95%B0%E5%AD%97%E5%AE%89%E5%85%A8%E4%BA%A7%E4%B8%9A%E7%A7%AF%E5%88%86%E4%BA%89%E5%A4%BA%E8%B5%9Bwp/</link>
+        <link>http://localhost:1313/p/2025%E6%95%B0%E5%AD%97%E5%AE%89%E5%85%A8%E4%BA%A7%E4%B8%9A%E7%A7%AF%E5%88%86%E4%BA%89%E5%A4%BA%E8%B5%9Bwp/</link>
         <pubDate>Tue, 22 Apr 2025 11:54:05 +0800</pubDate>
-        <author>2024211570@bupt.cn (XiaoYuan)</author>
-        <guid>http://localhost:11355/p/2025%E6%95%B0%E5%AD%97%E5%AE%89%E5%85%A8%E4%BA%A7%E4%B8%9A%E7%A7%AF%E5%88%86%E4%BA%89%E5%A4%BA%E8%B5%9Bwp/</guid>
+        <author>cwxiaoyuan@gmail.com (XiaoYuan)</author>
+        <guid>http://localhost:1313/p/2025%E6%95%B0%E5%AD%97%E5%AE%89%E5%85%A8%E4%BA%A7%E4%B8%9A%E7%A7%AF%E5%88%86%E4%BA%89%E5%A4%BA%E8%B5%9Bwp/</guid>
         <description>&lt;h2 id=&#34;31-数据安全综合场景赛&#34;&gt;3.1 数据安全综合场景赛
 &lt;/h2&gt;&lt;h3 id=&#34;数据删除与恢复-题目1&#34;&gt;数据删除与恢复 题目1
 &lt;/h3&gt;&lt;p&gt;就99个用户，挨个登录，发现就三种情况：admin 可登录 用户信息未找到&lt;/p&gt;
@@ -1232,10 +1476,10 @@
         </item>
         <item>
         <title>程序的机器级表示 - 1</title>
-        <link>http://localhost:11355/p/%E7%A8%8B%E5%BA%8F%E7%9A%84%E6%9C%BA%E5%99%A8%E7%BA%A7%E8%A1%A8%E7%A4%BA-1/</link>
+        <link>http://localhost:1313/p/%E7%A8%8B%E5%BA%8F%E7%9A%84%E6%9C%BA%E5%99%A8%E7%BA%A7%E8%A1%A8%E7%A4%BA-1/</link>
         <pubDate>Thu, 27 Mar 2025 21:12:32 +0800</pubDate>
-        <author>2024211570@bupt.cn (XiaoYuan)</author>
-        <guid>http://localhost:11355/p/%E7%A8%8B%E5%BA%8F%E7%9A%84%E6%9C%BA%E5%99%A8%E7%BA%A7%E8%A1%A8%E7%A4%BA-1/</guid>
+        <author>cwxiaoyuan@gmail.com (XiaoYuan)</author>
+        <guid>http://localhost:1313/p/%E7%A8%8B%E5%BA%8F%E7%9A%84%E6%9C%BA%E5%99%A8%E7%BA%A7%E8%A1%A8%E7%A4%BA-1/</guid>
         <description>&lt;h1 id=&#34;程序的机器级表示&#34;&gt;程序的机器级表示
 &lt;/h1&gt;&lt;ul&gt;
 &lt;li&gt;&lt;code&gt;编译器&lt;/code&gt; 基于&lt;strong&gt;编程语言的规则、操作系统的惯例、目标机器的指令集&lt;/strong&gt;生成机器代码。&lt;/li&gt;
@@ -1639,10 +1883,10 @@ $Imm$-立即数偏移，$r_b$-基址寄存器，$r_i$-变址寄存器，$s$-比�
         </item>
         <item>
         <title>提问的智慧</title>
-        <link>http://localhost:11355/p/%E6%8F%90%E9%97%AE%E7%9A%84%E6%99%BA%E6%85%A7/</link>
+        <link>http://localhost:1313/p/%E6%8F%90%E9%97%AE%E7%9A%84%E6%99%BA%E6%85%A7/</link>
         <pubDate>Sun, 19 Jan 2025 21:25:32 +0800</pubDate>
-        <author>2024211570@bupt.cn (XiaoYuan)</author>
-        <guid>http://localhost:11355/p/%E6%8F%90%E9%97%AE%E7%9A%84%E6%99%BA%E6%85%A7/</guid>
+        <author>cwxiaoyuan@gmail.com (XiaoYuan)</author>
+        <guid>http://localhost:1313/p/%E6%8F%90%E9%97%AE%E7%9A%84%E6%99%BA%E6%85%A7/</guid>
         <description>&lt;h1 id=&#34;前言&#34;&gt;前言
 &lt;/h1&gt;&lt;p&gt;本人 &lt;code&gt;ISFJ&lt;/code&gt;，非常乐意为大家解决问题，特别是一些技术问题。但是要知道，这种问题通常来说不是很好解决。但很遗憾的是，提问者通常不能提供解决问题所需的一些信息，以下是推荐所有人阅读的&lt;strong&gt;提问的智慧&lt;/strong&gt;以及我自己的一些建议。同时，在帮他人解决问题时我也会尽力遵循&lt;a class=&#34;link&#34; href=&#34;#%e5%a6%82%e4%bd%95%e6%9b%b4%e5%a5%bd%e5%9c%b0%e5%9b%9e%e7%ad%94%e9%97%ae%e9%a2%98&#34; &gt;如何更好地回答问题&lt;/a&gt;&lt;/p&gt;
 &lt;ol&gt;
@@ -2087,10 +2331,10 @@ I&amp;rsquo;ll be glad to translate responses, if you only use one or the other.
         </item>
         <item>
         <title>强网青少初赛WP</title>
-        <link>http://localhost:11355/p/%E5%BC%BA%E7%BD%91%E9%9D%92%E5%B0%91%E5%88%9D%E8%B5%9Bwp/</link>
+        <link>http://localhost:1313/p/%E5%BC%BA%E7%BD%91%E9%9D%92%E5%B0%91%E5%88%9D%E8%B5%9Bwp/</link>
         <pubDate>Wed, 27 Nov 2024 00:00:00 +0000</pubDate>
-        <author>2024211570@bupt.cn (XiaoYuan)</author>
-        <guid>http://localhost:11355/p/%E5%BC%BA%E7%BD%91%E9%9D%92%E5%B0%91%E5%88%9D%E8%B5%9Bwp/</guid>
+        <author>cwxiaoyuan@gmail.com (XiaoYuan)</author>
+        <guid>http://localhost:1313/p/%E5%BC%BA%E7%BD%91%E9%9D%92%E5%B0%91%E5%88%9D%E8%B5%9Bwp/</guid>
         <description>&lt;h2 id=&#34;misc&#34;&gt;Misc
 &lt;/h2&gt;&lt;h3 id=&#34;签到漫画&#34;&gt;签到漫画
 &lt;/h3&gt;&lt;p&gt;二维码拼图，扫码得到URL&lt;/p&gt;
@@ -2429,10 +2673,10 @@ POST提交&lt;code&gt;e=YXNzZXJ0&amp;amp;POST=system(&amp;quot;ls /&amp;quot;)&l
         </item>
         <item>
         <title>编码系列</title>
-        <link>http://localhost:11355/p/%E7%BC%96%E7%A0%81%E7%B3%BB%E5%88%97/</link>
+        <link>http://localhost:1313/p/%E7%BC%96%E7%A0%81%E7%B3%BB%E5%88%97/</link>
         <pubDate>Mon, 28 Oct 2024 15:43:08 +0800</pubDate>
-        <author>2024211570@bupt.cn (XiaoYuan)</author>
-        <guid>http://localhost:11355/p/%E7%BC%96%E7%A0%81%E7%B3%BB%E5%88%97/</guid>
+        <author>cwxiaoyuan@gmail.com (XiaoYuan)</author>
+        <guid>http://localhost:1313/p/%E7%BC%96%E7%A0%81%E7%B3%BB%E5%88%97/</guid>
         <description>&lt;h1 id=&#34;编码系列持续更新&#34;&gt;编码系列(持续更新)
 &lt;/h1&gt;&lt;h2 id=&#34;base家族&#34;&gt;Base家族
 &lt;/h2&gt;&lt;h3 id=&#34;base16&#34;&gt;Base16
@@ -2676,10 +2920,10 @@ POST提交&lt;code&gt;e=YXNzZXJ0&amp;amp;POST=system(&amp;quot;ls /&amp;quot;)&l
         </item>
         <item>
         <title>BuildCTF WP Misc部分</title>
-        <link>http://localhost:11355/p/buildctf-wp-misc%E9%83%A8%E5%88%86/</link>
+        <link>http://localhost:1313/p/buildctf-wp-misc%E9%83%A8%E5%88%86/</link>
         <pubDate>Thu, 24 Oct 2024 22:35:40 +0800</pubDate>
-        <author>2024211570@bupt.cn (XiaoYuan)</author>
-        <guid>http://localhost:11355/p/buildctf-wp-misc%E9%83%A8%E5%88%86/</guid>
+        <author>cwxiaoyuan@gmail.com (XiaoYuan)</author>
+        <guid>http://localhost:1313/p/buildctf-wp-misc%E9%83%A8%E5%88%86/</guid>
         <description>&lt;h1 id=&#34;buildctf-wp-misc部分&#34;&gt;BuildCTF WP Misc部分
 &lt;/h1&gt;&lt;p&gt;&lt;em&gt;第一次和各位师傅把misc AK了，太强了，太有成就感了！感谢各位&lt;/em&gt;&lt;/p&gt;
 &lt;h2 id=&#34;what-is-this&#34;&gt;what is this?
@@ -2879,10 +3123,10 @@ POST提交&lt;code&gt;e=YXNzZXJ0&amp;amp;POST=system(&amp;quot;ls /&amp;quot;)&l
         </item>
         <item>
         <title>Intro</title>
-        <link>http://localhost:11355/p/intro/</link>
+        <link>http://localhost:1313/p/intro/</link>
         <pubDate>Sat, 19 Oct 2024 15:41:42 +0800</pubDate>
-        <author>2024211570@bupt.cn (XiaoYuan)</author>
-        <guid>http://localhost:11355/p/intro/</guid>
+        <author>cwxiaoyuan@gmail.com (XiaoYuan)</author>
+        <guid>http://localhost:1313/p/intro/</guid>
         <description>&lt;h1 id=&#34;intro&#34;&gt;Intro
 &lt;/h1&gt;&lt;h2 id=&#34;what-is-machine-learning&#34;&gt;what is machine learning
 &lt;/h2&gt;&lt;ol&gt;
@@ -2947,10 +3191,10 @@ POST提交&lt;code&gt;e=YXNzZXJ0&amp;amp;POST=system(&amp;quot;ls /&amp;quot;)&l
         </item>
         <item>
         <title>NewStar 第一周 WP</title>
-        <link>http://localhost:11355/p/newstar-%E7%AC%AC%E4%B8%80%E5%91%A8-wp/</link>
+        <link>http://localhost:1313/p/newstar-%E7%AC%AC%E4%B8%80%E5%91%A8-wp/</link>
         <pubDate>Sat, 05 Oct 2024 14:45:13 +0800</pubDate>
-        <author>2024211570@bupt.cn (XiaoYuan)</author>
-        <guid>http://localhost:11355/p/newstar-%E7%AC%AC%E4%B8%80%E5%91%A8-wp/</guid>
+        <author>cwxiaoyuan@gmail.com (XiaoYuan)</author>
+        <guid>http://localhost:1313/p/newstar-%E7%AC%AC%E4%B8%80%E5%91%A8-wp/</guid>
         <description>&lt;h1 id=&#34;newstar-第一周-wp&#34;&gt;NewStar 第一周 WP
 &lt;/h1&gt;&lt;h2 id=&#34;misc&#34;&gt;Misc
 &lt;/h2&gt;&lt;h3 id=&#34;decompress&#34;&gt;decompress
@@ -3052,10 +3296,10 @@ POST提交&lt;code&gt;e=YXNzZXJ0&amp;amp;POST=system(&amp;quot;ls /&amp;quot;)&l
         </item>
         <item>
         <title>Python基础知识</title>
-        <link>http://localhost:11355/p/python%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/</link>
+        <link>http://localhost:1313/p/python%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/</link>
         <pubDate>Mon, 30 Sep 2024 11:12:41 +0800</pubDate>
-        <author>2024211570@bupt.cn (XiaoYuan)</author>
-        <guid>http://localhost:11355/p/python%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/</guid>
+        <author>cwxiaoyuan@gmail.com (XiaoYuan)</author>
+        <guid>http://localhost:1313/p/python%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/</guid>
         <description>&lt;h1 id=&#34;python基础知识&#34;&gt;Python基础知识
 &lt;/h1&gt;&lt;h2 id=&#34;学前提醒&#34;&gt;学前提醒
 &lt;/h2&gt;&lt;p&gt;&lt;strong&gt;一定记得要自己动手编程试试哦~&lt;/strong&gt;&lt;/p&gt;
@@ -3167,7 +3411,7 @@ POST提交&lt;code&gt;e=YXNzZXJ0&amp;amp;POST=system(&amp;quot;ls /&amp;quot;)&l
 &lt;ul&gt;
 &lt;li&gt;
 &lt;p&gt;算术运算符&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;http://localhost:11355/%e8%bf%90%e7%ae%97%e7%ac%a6.png&#34;
+&lt;p&gt;&lt;img src=&#34;http://localhost:1313/%e8%bf%90%e7%ae%97%e7%ac%a6.png&#34;
 	
 	
 	
@@ -3181,7 +3425,7 @@ POST提交&lt;code&gt;e=YXNzZXJ0&amp;amp;POST=system(&amp;quot;ls /&amp;quot;)&l
 &lt;/li&gt;
 &lt;li&gt;
 &lt;p&gt;关系运算符&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;http://localhost:11355/%e5%85%b3%e7%b3%bb%e8%bf%90%e7%ae%97%e7%ac%a6.png&#34;
+&lt;p&gt;&lt;img src=&#34;http://localhost:1313/%e5%85%b3%e7%b3%bb%e8%bf%90%e7%ae%97%e7%ac%a6.png&#34;
 	
 	
 	
@@ -3195,7 +3439,7 @@ POST提交&lt;code&gt;e=YXNzZXJ0&amp;amp;POST=system(&amp;quot;ls /&amp;quot;)&l
 &lt;/li&gt;
 &lt;li&gt;
 &lt;p&gt;逻辑运算符&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;http://localhost:11355/%e9%80%bb%e8%be%91%e8%bf%90%e7%ae%97%e7%ac%a6.png&#34;
+&lt;p&gt;&lt;img src=&#34;http://localhost:1313/%e9%80%bb%e8%be%91%e8%bf%90%e7%ae%97%e7%ac%a6.png&#34;
 	
 	
 	
@@ -3215,7 +3459,7 @@ POST提交&lt;code&gt;e=YXNzZXJ0&amp;amp;POST=system(&amp;quot;ls /&amp;quot;)&l
 &lt;li&gt;字符串（关于转义字符可转到“关于格式化输出”）
 &lt;ul&gt;
 &lt;li&gt;索引：从零开始的标号
-&lt;img src=&#34;http://localhost:11355/%e7%b4%a2%e5%bc%95.png&#34;
+&lt;img src=&#34;http://localhost:1313/%e7%b4%a2%e5%bc%95.png&#34;
 	
 	
 	
@@ -3260,7 +3504,7 @@ ello
 &lt;/code&gt;&lt;/pre&gt;
 &lt;ul&gt;
 &lt;li&gt;速会切片：
-&lt;img src=&#34;http://localhost:11355/%e5%88%87%e7%89%87.png&#34;
+&lt;img src=&#34;http://localhost:1313/%e5%88%87%e7%89%87.png&#34;
 	
 	
 	
@@ -3451,7 +3695,7 @@ C 12
 &lt;ul&gt;
 &lt;li&gt;
 &lt;p&gt;分支结构(if语句)：&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;http://localhost:11355/%e5%88%86%e6%94%af%e7%bb%93%e6%9e%84.png&#34;
+&lt;p&gt;&lt;img src=&#34;http://localhost:1313/%e5%88%86%e6%94%af%e7%bb%93%e6%9e%84.png&#34;
 	
 	
 	
@@ -3543,10 +3787,10 @@ C 12
         </item>
         <item>
         <title>TSCTF-J wp</title>
-        <link>http://localhost:11355/p/tsctf-j-wp/</link>
+        <link>http://localhost:1313/p/tsctf-j-wp/</link>
         <pubDate>Sat, 28 Sep 2024 11:12:41 +0800</pubDate>
-        <author>2024211570@bupt.cn (XiaoYuan)</author>
-        <guid>http://localhost:11355/p/tsctf-j-wp/</guid>
+        <author>cwxiaoyuan@gmail.com (XiaoYuan)</author>
+        <guid>http://localhost:1313/p/tsctf-j-wp/</guid>
         <description>&lt;h1 id=&#34;tsctf-j-xiaoyuan-writeup&#34;&gt;TSCTF-J XiaoYuan Writeup
 &lt;/h1&gt;&lt;h2 id=&#34;misc&#34;&gt;MISC
 &lt;/h2&gt;&lt;hr&gt;
@@ -3963,7 +4207,7 @@ C 12
 &lt;h4 id=&#34;1&#34;&gt;1
 &lt;/h4&gt;&lt;p&gt;内存镜像是 &lt;code&gt;.elf&lt;/code&gt; 格式的，看了一下重新下了个volatility3，旧的不支持
 用 &lt;code&gt;vol.exe&lt;/code&gt; 查看镜像信息即得
-&lt;img src=&#34;http://localhost:11355/1.png&#34;
+&lt;img src=&#34;http://localhost:1313/1.png&#34;
 	
 	
 	
@@ -3977,7 +4221,7 @@ C 12
 &lt;/h4&gt;&lt;p&gt;用 &lt;code&gt;vol.exe -f dump.elf windows.hashdump&lt;/code&gt;得到了密码的hash，在线爆破得到密码提交flag&lt;/p&gt;
 &lt;h4 id=&#34;3&#34;&gt;3
 &lt;/h4&gt;&lt;p&gt;&lt;code&gt;vol.exe -f dump.elf windows.pslist&lt;/code&gt;查看进程
-&lt;img src=&#34;http://localhost:11355/3-1.png&#34;
+&lt;img src=&#34;http://localhost:1313/3-1.png&#34;
 	
 	
 	
@@ -3987,7 +4231,7 @@ C 12
 	
 	
 &gt;
-&lt;img src=&#34;http://localhost:11355/3-2.png&#34;
+&lt;img src=&#34;http://localhost:1313/3-2.png&#34;
 	
 	
 	
