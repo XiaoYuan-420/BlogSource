@@ -2,25 +2,40 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>http://localhost:1313/categories/</loc>
-    <lastmod>2025-10-13T18:10:21+08:00</lastmod>
+    <loc>http://localhost:1313/tags/bettafish/</loc>
+    <lastmod>2025-12-02T18:13:49+08:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/categories/ctf/</loc>
-    <lastmod>2025-10-13T18:10:21+08:00</lastmod>
+    <loc>http://localhost:1313/categories/</loc>
+    <lastmod>2025-12-02T18:13:49+08:00</lastmod>
   </url><url>
     <loc>http://localhost:1313/post/</loc>
-    <lastmod>2025-10-13T18:10:21+08:00</lastmod>
+    <lastmod>2025-12-02T18:13:49+08:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/p/small-talk/</loc>
+    <lastmod>2025-12-02T18:13:49+08:00</lastmod>
   </url><url>
     <loc>http://localhost:1313/tags/</loc>
+    <lastmod>2025-12-02T18:13:49+08:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/tags/%E7%A2%8E%E7%A2%8E%E5%BF%B5/</loc>
+    <lastmod>2025-12-02T18:13:49+08:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/categories/%E7%A2%8E%E7%A2%8E%E5%BF%B5/</loc>
+    <lastmod>2025-12-02T18:13:49+08:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/tags/%E5%BE%AE%E8%88%86/</loc>
+    <lastmod>2025-12-02T18:13:49+08:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/</loc>
+    <lastmod>2025-12-02T18:13:49+08:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/categories/ctf/</loc>
     <lastmod>2025-10-13T18:10:21+08:00</lastmod>
   </url><url>
     <loc>http://localhost:1313/p/tsctf-j-2025-misc%E9%83%A8%E5%88%86-wp/</loc>
     <lastmod>2025-10-13T18:10:21+08:00</lastmod>
   </url><url>
     <loc>http://localhost:1313/tags/wp/</loc>
-    <lastmod>2025-10-13T18:10:21+08:00</lastmod>
-  </url><url>
-    <loc>http://localhost:1313/</loc>
     <lastmod>2025-10-13T18:10:21+08:00</lastmod>
   </url><url>
     <loc>http://localhost:1313/tags/qa/</loc>
