@@ -1,5 +1,5 @@
-baseurl = "https://XiaoYuan-420.gituhub.io/"
-languageCode = "zh-cn"
+baseurl = "https://sus-morn.tech/"
+locale = "zh-CN"
 theme = "hugo-theme-stack"
 title = "XiaoYuan's Blog"
 copyright = "XiaoYuan"
@@ -8,7 +8,7 @@ hasCJKLanguage = true
 
 
 [languages.zh-cn]
-languageName = "中文"
+label = "中文"
 title = "萧垣的博客"
 weight = 2
 
