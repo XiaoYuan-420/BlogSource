@@ -3,6 +3,7 @@ title: "TSCTF-J 2026 It 系列 WP"
 date: 2026-10-14T20:00:00+08:00
 slug: tsctf-j-2026-it-series-wp
 draft: false
+math: true
 categories:
   - CTF
 tags:
@@ -13,7 +14,6 @@ tags:
 
 ## Misc
 
-+++++
 ### PlayIt
 
 just for fun，这里还是要简要介绍一下z3这个库，对于数独这类比较典型的约束求解问题，其实使用z3会比绝大多数师傅在wp中提到的`位集合回溯`的写法要便捷，可以看这篇博客[solver学习 | Snow's Blog](https://snow233.github.io/2025/03/11/Z3-solver%E5%AD%A6%E4%B9%A0/index.html)，下面给出解题的代码
@@ -110,8 +110,6 @@ if __name__ == "__main__":
     main()
 ```
 
-+++++
-+++++++
 ### RepairIt
 
 这里先给出损坏文件与源文件的diff，并贴出[PE文件结构的学习链接](https://www.cnblogs.com/liert/p/17089779.html)
@@ -210,11 +208,8 @@ count 8 changed bytes 63
 
  ![](attachments/257dbd1b-855d-4543-93f7-b73733b201bc.png " =1734x927")
 
-+++++++
-++++++++
 ## AI
 
-++++++
 ### RejectIt
 
 这道题是要让模型拒绝回答所有问题，解法比较多，看师傅们交上来的WP基本都是往固定的词上走，这里给出一个更通用的方法。之所以是更通用一方面是因为模型的回答还是有意义的，另一方面是这版思路只要改一个符号就能解决很多问题，出于技术伦理的问题这里就不展开。
@@ -706,7 +701,3 @@ def main() -> None:
 if __name__ == "__main__":
     main()
 ```
-
-++++++
-+++++++
-++++++
