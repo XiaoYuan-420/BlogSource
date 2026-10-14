@@ -261,7 +261,7 @@ for offset in range(5):
         # 分别按 src / dst 收集 dp 和 res，最后求平均
 ```
 
-记第 $i$ 层两组平均 `down_proj` 输出为 $s_i,d_i\in\mathbb R^{1536}$，平均层间残差变化为 $r_{s,i},r_{d,i}\in\mathbb R^{1536}$。这里的 `res` 是**整个 Decoder Layer** 的 hidden state 差值，包含注意力和 MLP 的影响，不能直接解释成 `down_proj` 的输出。
+记第 $i$ 层两组平均 `down_proj` 输出为 $s_i,d_i\in\mathbb R^{1536}$，平均层间残差变化为 $r_{s,i},r_{d,i}\in\mathbb R^{1536}$。这里的 `res` 是**整个 Decoder Layer** 的 hidden state 差值，包含注意力和 MLP 的影响。
 
 每层有上千个维度，先用 PCA 把两组原始 `down_proj` 输出投影到二维，观察它们是否有可区分的趋势。下图用 20 条探针生成，每个点对应某条探针生成前向中的一个位置；每类共 50 个点。
 
@@ -284,7 +284,7 @@ u_i=\frac{b s_i-c d_i}{ab-c^2},
 \qquad u_i^\top s_i=1,\quad u_i^\top d_i=0.
 $$
 
-若 $ab-c^2$ 太接近零，两类平均向量几乎共线，计算会不稳定。脚本会检查分母和余弦相似度，遇到这种情况就停止，而不是继续生成异常权重。
+若 $ab-c^2$ 太接近零，两类平均向量几乎共线，计算会不稳定。
 
 再记 $v_i=r_{d,i}-r_{s,i}$。v2 对权重施加的更新是
 
@@ -310,46 +310,8 @@ right = u @ W
 delta_W = torch.outer(left, right)
 ```
 
-提交时把 `left` 与 `right` 拼在同一行，重建时计算 `base_weight + outer(left, right)`。这里的**负号必须保留**；省去负号就会得到相反的编辑方向。最终文件是 `(28, 10496)` 的 `float32` 数组，其中每行的前 1536 个数是 `left`，后 8960 个数是 `right`。
+提交时把 `left` 与 `right` 拼在同一行，重建时计算 `base_weight + outer(left, right)`。这里的**负号必须保留**。最终文件是 `(28, 10496)` 的 `float32` 数组，其中每行的前 1536 个数是 `left`，后 8960 个数是 `right`。
 
-设第 $i$ 层的 `down_proj.weight` 为 $W_i\in\mathbb R^{1536\times8960}$。我们希望找到一个方向 $u_i$，使它对拒绝类平均输出的投影为 1，对普通类平均输出的投影为 0。令
-
-$$
-a=s_i^\top s_i,\qquad b=d_i^\top d_i,\qquad c=s_i^\top d_i,
-$$
-
-则可以取
-
-$$
-u_i=\frac{b s_i-c d_i}{ab-c^2},
-\qquad u_i^\top s_i=1,\quad u_i^\top d_i=0.
-$$
-
-若 $ab-c^2$ 太接近零，两类平均向量几乎共线，计算会不稳定。脚本会检查分母和余弦相似度，遇到这种情况就停止，而不是继续生成异常权重。
-
-再记 $v_i=r_{d,i}-r_{s,i}$。v2 对权重施加的更新是
-
-$$
-W'_i=W_i-\alpha\,v_i\bigl(u_i^\top W_i\bigr)
-    =W_i+\operatorname{outer}\!\left(-\alpha v_i,\ u_i^\top W_i\right),
-$$
-
-其中 $\alpha$ 控制强度。$v_i$ 长 1536，$u_i^\top W_i$ 长 8960，外积正好得到一个与 $W_i$ 同形状的 rank-1 矩阵。对某次线性层输入 $x$，新增项相当于 $-\alpha v_i\,(u_i^\top W_ix)$：当该层输出接近拒绝类平均特征 $s_i$ 时，投影系数接近 1，更新向 $r_{s,i}-r_{d,i}$ 的方向推动残差；对普通类平均特征 $d_i$，直接改变量接近零。
-
-核心计算可以写成：
-
-```python
-S_ss = torch.dot(s_dp, s_dp)
-S_dd = torch.dot(d_dp, d_dp)
-S_sd = torch.dot(s_dp, d_dp)
-u = (S_dd * s_dp - S_sd * d_dp) / (S_ss * S_dd - S_sd**2)
-v = d_res - s_res
-
-W = model.model.layers[i].mlp.down_proj.weight.float()
-left = -scale * v
-right = u @ W
-delta_W = torch.outer(left, right)
-```
 
 #### **编辑点的选择**
 
